@@ -17,10 +17,7 @@ class LoginView extends GetView<LoginController> {
             color: Colors.blue,
             child: Align(
               alignment: Alignment.topCenter,
-              child: Lottie.network(
-                'https://lottie.host/6b8e9303-41ab-46cf-b508-f07ed65fd241/KlCFDIbg5B.json',
-                height: 300,
-              ),
+              child: Lottie.asset('assets/animations/auth.json', height: 300),
             ),
           ),
 
@@ -39,7 +36,7 @@ class LoginView extends GetView<LoginController> {
               ),
               child: SingleChildScrollView(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 60, left: 30, right: 30),
+                  margin: const EdgeInsets.only(top: 30, left: 30, right: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
