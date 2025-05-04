@@ -113,7 +113,9 @@ class LoginView extends GetView<LoginController> {
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.offAllNamed('/home');
+                          },
                           child: Text(
                             'Sign in',
                             style: GoogleFonts.poppins(
@@ -207,7 +209,7 @@ class LoginView extends GetView<LoginController> {
                           ),
                           SizedBox(width: 2),
                           InkWell(
-                            onTap: () => Get.toNamed('/register'),
+                            onTap: () => Get.offAllNamed('/register'),
                             child: Text(
                               'Sign Up',
                               style: GoogleFonts.poppins(
