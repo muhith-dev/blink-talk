@@ -73,7 +73,9 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Get.toNamed('/dealing-with-model');
+            },
             child: Padding(
               padding: const EdgeInsets.only(top: 28.0),
               child: Column(

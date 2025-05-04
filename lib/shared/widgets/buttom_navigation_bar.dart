@@ -15,10 +15,10 @@ class BottomNavBar extends StatelessWidget {
             Get.toNamed(Routes.HOME);
             break;
           case 1:
-            Get.toNamed(Routes.HOME);
+            Get.toNamed(Routes.DEALING_WITH_MODEL);
             break;
           case 2:
-            Get.toNamed(Routes.HOME);
+            Get.toNamed(Routes.ABOUT);
             break;
         }
       },
@@ -56,9 +56,9 @@ class BottomNavBar extends StatelessWidget {
     switch (currentRoute) {
       case Routes.HOME:
         return 0;
-      case Routes.HOME:
+      case Routes.DEALING_WITH_MODEL:
         return 1;
-      case Routes.HOME:
+      case Routes.ABOUT:
         return 2;
       default:
         return 0;

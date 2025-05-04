@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import '../modules/about/bindings/about_binding.dart';
+import '../modules/about/views/about_view.dart';
+import '../modules/dealing_with_model/bindings/dealing_with_model_binding.dart';
+import '../modules/dealing_with_model/views/dealing_with_model_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -14,7 +18,8 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.ONBOARDING;
+  // static const INITIAL = Routes.ONBOARDING;
+  static const INITIAL = Routes.HOME;
 
   static final routes = [
     GetPage(
@@ -36,6 +41,16 @@ class AppPages {
       name: _Paths.ONBOARDING,
       page: () => const OnboardingView(),
       binding: OnboardingBinding(),
+    ),
+    GetPage(
+      name: _Paths.DEALING_WITH_MODEL,
+      page: () => const DealingWithModelView(),
+      binding: DealingWithModelBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABOUT,
+      page: () => const AboutView(),
+      binding: AboutBinding(),
     ),
   ];
 }
