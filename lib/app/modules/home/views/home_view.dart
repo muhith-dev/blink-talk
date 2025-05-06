@@ -1,3 +1,4 @@
+import 'package:blink_talk/app/modules/learn/learn_1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +21,9 @@ class HomeView extends GetView<HomeController> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 70.0),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(Learn1());
+                    },
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 25.0),
                       child: Column(
