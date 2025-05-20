@@ -25,7 +25,7 @@ class LoginView extends GetView<LoginController> {
             top: 300,
             left: 0,
             right: 0,
-            bottom: 0, // penting untuk height penuh dari posisi top
+            bottom: 0,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -69,7 +69,7 @@ class LoginView extends GetView<LoginController> {
                       SizedBox(height: 6),
                       CustomTextField(
                         hintText: 'Enter your email',
-                        controller: TextEditingController(),
+                        controller: controller.emailController,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       SizedBox(height: 12),
@@ -84,8 +84,8 @@ class LoginView extends GetView<LoginController> {
                       SizedBox(height: 6),
                       CustomTextField(
                         hintText: 'Enter your password',
-                        controller: TextEditingController(),
-                        keyboardType: TextInputType.emailAddress,
+                        controller: controller.passwordController,
+                        keyboardType: TextInputType.text,
                       ),
                       SizedBox(height: 12),
                       Align(
@@ -110,16 +110,21 @@ class LoginView extends GetView<LoginController> {
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-                          onPressed: () {
-                            Get.offAllNamed('/home');
-                          },
-                          child: Text(
-                            'Sign in',
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          onPressed: controller.login,
+                          child: Obx(
+                            () =>
+                                controller.isLoading.value
+                                    ? CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                    : Text(
+                                      'Sign in',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                           ),
                         ),
                       ),

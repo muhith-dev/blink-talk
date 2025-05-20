@@ -69,9 +69,25 @@ class RegisterView extends GetView<RegisterController> {
                       SizedBox(height: 6),
                       CustomTextField(
                         hintText: 'Your name',
-                        controller: TextEditingController(),
-                        keyboardType: TextInputType.emailAddress,
+                        controller: controller.nameController,
+                        keyboardType: TextInputType.text,
                       ),
+                      SizedBox(height: 12),
+                      Text(
+                        'Username',
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      CustomTextField(
+                        hintText: 'Your username',
+                        controller: controller.usernameController,
+                        keyboardType: TextInputType.text,
+                      ),
+                      SizedBox(height: 12),
                       Text(
                         'Email',
                         style: GoogleFonts.poppins(
@@ -83,7 +99,7 @@ class RegisterView extends GetView<RegisterController> {
                       SizedBox(height: 6),
                       CustomTextField(
                         hintText: 'Enter your email',
-                        controller: TextEditingController(),
+                        controller: controller.emailController,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       SizedBox(height: 12),
@@ -98,8 +114,8 @@ class RegisterView extends GetView<RegisterController> {
                       SizedBox(height: 6),
                       CustomTextField(
                         hintText: 'Enter your password',
-                        controller: TextEditingController(),
-                        keyboardType: TextInputType.emailAddress,
+                        controller: controller.passwordController,
+                        keyboardType: TextInputType.visiblePassword,
                       ),
                       SizedBox(height: 35),
                       Container(
@@ -112,14 +128,21 @@ class RegisterView extends GetView<RegisterController> {
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-                          onPressed: () {},
-                          child: Text(
-                            'Sign Up',
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          onPressed: controller.register,
+                          child: Obx(
+                            () =>
+                                controller.isLoading.value
+                                    ? CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                    : Text(
+                                      'Sign Up',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                           ),
                         ),
                       ),
