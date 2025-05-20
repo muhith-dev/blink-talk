@@ -113,6 +113,7 @@ class RegisterView extends GetView<RegisterController> {
                       ),
                       SizedBox(height: 6),
                       CustomTextField(
+                        obscureText: true,
                         hintText: 'Enter your password',
                         controller: controller.passwordController,
                         keyboardType: TextInputType.visiblePassword,
