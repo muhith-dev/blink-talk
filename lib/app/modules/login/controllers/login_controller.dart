@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blink_talk/app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -30,6 +31,8 @@ class LoginController extends GetxController {
       if (response.statusCode == 200) {
         final token = data['token'];
         final user = data['user'];
+
+        await AuthService.saveToken(token);
 
         Get.offAllNamed('/home');
         Get.snackbar('Success', 'Login berhasil!');
