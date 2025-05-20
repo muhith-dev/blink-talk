@@ -2,6 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../services/auth_service.dart';
+
 class DealingWithModelController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CameraController? cameraController;
@@ -117,8 +119,9 @@ class DealingWithModelController extends GetxController {
           ),
           const Spacer(),
           IconButton(
-            onPressed: () {
-              Get.offAllNamed('/onboarding');
+            onPressed: () async {
+              await AuthService.clearToken();
+              Get.offAllNamed('/login');
             },
             icon: const Icon(Icons.exit_to_app, color: Colors.blue, size: 18),
           ),
