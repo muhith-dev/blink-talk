@@ -1,10 +1,17 @@
+import 'dart:convert';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../../api_key.dart';
 import '../../../services/auth_service.dart';
 
 class DealingWithModelController extends GetxController {
+  var firstName = ''.obs;
+  var email = ''.obs;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CameraController? cameraController;
   var isCameraActive = false.obs;
@@ -14,6 +21,7 @@ class DealingWithModelController extends GetxController {
   void onInit() {
     super.onInit();
     initializeCameras();
+    getProfile();
   }
 
   Future<void> initializeCameras() async {
@@ -38,10 +46,7 @@ class DealingWithModelController extends GetxController {
     try {
       if (cameras == null || cameras!.isEmpty) return;
 
-      cameraController = CameraController(
-        cameras![1], // Gunakan kamera depan
-        ResolutionPreset.medium,
-      );
+      cameraController = CameraController(cameras![1], ResolutionPreset.medium);
 
       await cameraController!.initialize();
       isCameraActive.value = true;
@@ -93,6 +98,40 @@ class DealingWithModelController extends GetxController {
     );
   }
 
+  Future<void> getProfile() async {
+    final String apiUrl = "$backendUrl/api/auth/profile";
+    final token = await AuthService.getToken();
+    print(token);
+
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        firstName.value = data['user']['name'];
+        email.value = data['user']['email'];
+        print(email.value);
+      } else {
+        print('Gagal ambil data user: ${response.statusCode}');
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Terjadi kesalahan. Coba lagi.',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      print("get user credential error: $e");
+    }
+  }
+
   Widget _buildDrawerFooter() {
     return Container(
       color: Colors.white,
@@ -103,19 +142,21 @@ class DealingWithModelController extends GetxController {
             onPressed: () {},
             icon: const Icon(Icons.person, color: Colors.grey),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                'John Doe',
-                style: TextStyle(
-                  color: Color(0xff496173),
-                  fontWeight: FontWeight.bold,
+          Obx(
+            () => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  firstName.value,
+                  style: TextStyle(
+                    color: Color(0xff496173),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Text('example@email.com', style: TextStyle(color: Colors.grey)),
-            ],
+                Text(email.value, style: TextStyle(color: Colors.grey)),
+              ],
+            ),
           ),
           const Spacer(),
           IconButton(
