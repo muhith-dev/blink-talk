@@ -118,6 +118,23 @@ class DealingWithModelController extends GetxController {
         firstName.value = data['user']['name'];
         email.value = data['user']['email'];
         print(email.value);
+      } else if (response.statusCode == 401) {
+        final data = jsonDecode(response.body);
+        if (data["msg"] == 'Token has expired') {
+          print(data);
+          await AuthService.clearToken();
+          Get.snackbar(
+            'Sesi habis',
+            'Silahkan login kembali',
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 3),
+            margin: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: Get.height / 2.5,
+            ),
+          );
+          Get.offAllNamed('/login');
+        }
       } else {
         print('Gagal ambil data user: ${response.statusCode}');
       }
