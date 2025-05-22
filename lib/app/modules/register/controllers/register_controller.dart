@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../api_key.dart';
+
 class RegisterController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
@@ -15,8 +17,8 @@ class RegisterController extends GetxController {
   Future<void> register() async {
     isLoading.value = true;
 
-    final String apiUrl = "https://be-flask-c.vercel.app/api/auth/register";
-    final String apiKey = "api_key_bais_sangat_aman_sekali";
+    final String apiUrl = "$backendUrl/api/auth/register";
+    final String apiKey = backendApiKey;
 
     try {
       final response = await http.post(

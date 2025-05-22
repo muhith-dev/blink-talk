@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blink_talk/api_key.dart';
 import 'package:blink_talk/app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,8 +15,8 @@ class LoginController extends GetxController {
   Future<void> login() async {
     isLoading.value = true;
 
-    final String apiUrl = "https://be-flask-c.vercel.app/api/auth/login";
-    final String apiKey = "api_key_bais_sangat_aman_sekali";
+    final String apiUrl = "$backendUrl/api/auth/login";
+    final String apiKey = backendApiKey;
 
     try {
       final response = await http.post(
