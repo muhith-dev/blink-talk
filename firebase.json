@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"blink-talk","appId":"1:1066733988309:android:0c820a7c222d7a54d5f55c","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"blink-talk","configurations":{"android":"1:1066733988309:android:0c820a7c222d7a54d5f55c","web":"1:1066733988309:web:329d4bf497135ec6d5f55c"}}}}}}

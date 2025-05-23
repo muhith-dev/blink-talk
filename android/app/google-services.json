@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1066733988309",
+    "project_id": "blink-talk",
+    "storage_bucket": "blink-talk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066733988309:android:0c820a7c222d7a54d5f55c",
+        "android_client_info": {
+          "package_name": "com.example.blink_talk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUTPqryea9nHRq-hASTFC4jqOXkTRaEh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
