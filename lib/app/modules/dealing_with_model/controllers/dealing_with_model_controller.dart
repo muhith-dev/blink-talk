@@ -9,6 +9,7 @@ import '../../../../api_key.dart';
 import '../../../services/auth_service.dart';
 
 class DealingWithModelController extends GetxController {
+  final ApiController controller = Get.put(ApiController());
   var firstName = ''.obs;
   var email = ''.obs;
 
@@ -21,7 +22,12 @@ class DealingWithModelController extends GetxController {
   void onInit() {
     super.onInit();
     initializeCameras();
-    getProfile();
+    loadApiAndProfile();
+  }
+
+  void loadApiAndProfile() async {
+    await controller.fetchAPIData();
+    await getProfile();
   }
 
   Future<void> initializeCameras() async {
@@ -99,9 +105,11 @@ class DealingWithModelController extends GetxController {
   }
 
   Future<void> getProfile() async {
-    final String apiUrl = "$backendUrl/api/auth/profile";
+    final String baseUrl = controller.backendAPI.value;
+    final String apiUrl = "$baseUrl/api/auth/profile";
     final token = await AuthService.getToken();
-    print(token);
+    print(baseUrl);
+    print(apiUrl);
 
     try {
       final response = await http.get(

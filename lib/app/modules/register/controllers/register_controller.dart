@@ -11,14 +11,16 @@ class RegisterController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final ApiController controller = Get.put(ApiController());
 
   var isLoading = false.obs;
 
   Future<void> register() async {
     isLoading.value = true;
-
-    final String apiUrl = "$backendUrl/api/auth/register";
-    final String apiKey = backendApiKey;
+    final String baseUrlCloud = controller.backendAPI.value;
+    final String apiKeyCloud = controller.backendApiKey.value;
+    final String apiUrl = "$baseUrlCloud/api/auth/register";
+    final String apiKey = "$apiKeyCloud";
 
     try {
       final response = await http.post(

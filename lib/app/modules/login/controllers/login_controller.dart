@@ -9,14 +9,29 @@ import 'package:http/http.dart' as http;
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final ApiController controller = Get.put(ApiController());
 
   var isLoading = false.obs;
 
   Future<void> login() async {
-    isLoading.value = true;
+    // if (controller.backendAPI.value.isEmpty ||
+    //     controller.backendAPI.value == "Not Available") {
+    //   Get.snackbar(
+    //     'Error',
+    //     'API belum tersedia. Pastikan koneksi internet dan coba lagi.',
+    //     backgroundColor: Colors.red,
+    //     colorText: Colors.white,
+    //   );
+    //   return;
+    // }
 
-    final String apiUrl = "$backendUrl/api/auth/login";
-    final String apiKey = backendApiKey;
+    isLoading.value = true;
+    final String baseUrlCloud = controller.backendAPI.value;
+    final String apiKeyCloud = controller.backendApiKey.value;
+    final String apiUrl = "$baseUrlCloud/api/auth/login";
+    final String apiKey = "$apiKeyCloud";
+    print("Base URL: ${controller.backendAPI.value}");
+    print("API URL: $apiUrl");
 
     try {
       final response = await http.post(
