@@ -106,7 +106,7 @@ class DealingWithModelController extends GetxController {
 
   Future<void> getProfile() async {
     final String baseUrl = controller.backendAPI.value;
-    final String apiUrl = "$baseUrl/api/auth/profile";
+    final String apiUrl = "$baseUrl/api/users/profile";
     final token = await AuthService.getToken();
     print(baseUrl);
     print(apiUrl);
