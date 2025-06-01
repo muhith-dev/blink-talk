@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:blink_talk/api_key.dart';
-import 'package:blink_talk/app/services/auth_service.dart';
+import 'package:blink_talk/app/data/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../data/services/api_service.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();

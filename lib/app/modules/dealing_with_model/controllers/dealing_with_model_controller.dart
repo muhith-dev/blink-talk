@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../api_key.dart';
-import '../../../services/auth_service.dart';
+import '../../../data/services/api_service.dart';
+import '../../../data/services/auth_service.dart';
 
 class DealingWithModelController extends GetxController {
   final ApiController controller = Get.put(ApiController());

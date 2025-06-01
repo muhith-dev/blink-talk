@@ -1,4 +1,4 @@
-import 'package:blink_talk/app/services/auth_service.dart';
+import 'package:blink_talk/app/data/services/auth_service.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

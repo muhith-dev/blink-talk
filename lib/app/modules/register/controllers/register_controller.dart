@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../api_key.dart';
+import '../../../data/services/api_service.dart';
 
 class RegisterController extends GetxController {
   final TextEditingController nameController = TextEditingController();
