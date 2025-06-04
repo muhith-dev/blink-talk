@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../data/models/login_response.dart';
 import '../../../data/services/api_service.dart';
 import '../../../data/services/auth_service.dart';
 
@@ -123,9 +124,14 @@ class DealingWithModelController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        firstName.value = data['user']['name'];
-        email.value = data['user']['email'];
+        final loginResponse = LoginResponse.fromJson(data);
+
+        firstName.value = loginResponse.user.name;
+        email.value = loginResponse.user.email;
+
         print(email.value);
+        print(loginResponse.expiresIn);
+        print(loginResponse.message);
       } else if (response.statusCode == 401) {
         final data = jsonDecode(response.body);
         if (data["msg"] == 'Token has expired') {
