@@ -169,29 +169,29 @@ class LoginView extends GetView<LoginController> {
                               height: 24,
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 0.5),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  5.0,
-                                ), //                 <--- border radius here
-                              ),
-                            ),
-                            width: 70,
-                            height: 49,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                top: 15,
-                                bottom: 15,
-                                left: 25,
-                                right: 25,
-                              ),
-                              child: Image(
-                                image: AssetImage('assets/icons/x.png'),
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     border: Border.all(width: 0.5),
+                          //     borderRadius: BorderRadius.all(
+                          //       Radius.circular(
+                          //         5.0,
+                          //       ), //                 <--- border radius here
+                          //     ),
+                          //   ),
+                          //   width: 70,
+                          //   height: 49,
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.only(
+                          //       top: 15,
+                          //       bottom: 15,
+                          //       left: 25,
+                          //       right: 25,
+                          //     ),
+                          //     child: Image(
+                          //       image: AssetImage('assets/icons/x.png'),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       SizedBox(height: 60),
