@@ -12,7 +12,20 @@
           "package_name": "com.example.blink_talk"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1066733988309-f2kanlbchpdqlk6o9mhom7o5o01173ct.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.blink_talk",
+            "certificate_hash": "12226e50e0517d7b6ee786784c3670cc9c5b98e4"
+          }
+        },
+        {
+          "client_id": "1066733988309-psaiafconpiimjhf6ie743lfbrn9m9le.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBUTPqryea9nHRq-hASTFC4jqOXkTRaEh8"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066733988309-psaiafconpiimjhf6ie743lfbrn9m9le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

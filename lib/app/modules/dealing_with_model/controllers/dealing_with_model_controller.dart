@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../data/models/login_response.dart';
@@ -106,13 +108,28 @@ class DealingWithModelController extends GetxController {
   }
 
   Future<void> getProfile() async {
-    final String baseUrl = controller.backendAPI.value;
-    final String apiUrl = "$baseUrl/api/users/profile";
-    final token = await AuthService.getToken();
-    print(baseUrl);
-    print(apiUrl);
-
     try {
+      final firebaseUser = FirebaseAuth.instance.currentUser;
+
+      if (firebaseUser != null) {
+        print("Login via Google terdeteksi");
+
+        firstName.value = firebaseUser.displayName ?? 'Tanpa Nama';
+        email.value = firebaseUser.email ?? 'Tanpa Email';
+
+        print("Nama: ${firstName.value}");
+        print("Email: ${email.value}");
+        return;
+      }
+
+      final String baseUrl = controller.backendAPI.value;
+      final String apiUrl = "$baseUrl/api/users/profile";
+      final token = await AuthService.getToken();
+
+      print("Login via token backend");
+      print(baseUrl);
+      print(apiUrl);
+
       final response = await http.get(
         Uri.parse(apiUrl),
         headers: {
@@ -129,13 +146,14 @@ class DealingWithModelController extends GetxController {
         firstName.value = loginResponse.user.name;
         email.value = loginResponse.user.email;
 
-        print(email.value);
+        print("Nama: ${firstName.value}");
+        print("Email: ${email.value}");
         print(loginResponse.expiresIn);
         print(loginResponse.message);
       } else if (response.statusCode == 401) {
         final data = jsonDecode(response.body);
         if (data["msg"] == 'Token has expired') {
-          print(data);
+          print("Token expired: $data");
           await AuthService.clearToken();
           Get.snackbar(
             'Sesi habis',
@@ -192,6 +210,8 @@ class DealingWithModelController extends GetxController {
           const Spacer(),
           IconButton(
             onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              await GoogleSignIn().signOut();
               await AuthService.clearToken();
               Get.offAllNamed('/login');
             },

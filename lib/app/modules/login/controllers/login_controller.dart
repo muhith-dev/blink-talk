@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:blink_talk/app/data/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../data/services/api_service.dart';
@@ -71,6 +73,47 @@ class LoginController extends GetxController {
       print("Login error: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email', 'profile'],
+      );
+
+      await googleSignIn.signOut(); // optional, untuk logout dulu
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        print("Login Google dibatalkan pengguna");
+        Get.snackbar("Login Dibatalkan", "Pengguna membatalkan login Google.");
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Login ke Firebase
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      if (user != null) {
+        print("Login sukses: ${user.displayName} (${user.email})");
+
+        Get.snackbar("Sukses", "Login Google berhasil");
+        Get.offAllNamed('/home');
+      }
+    } catch (e) {
+      print("Error saat login Google: $e");
+      Get.snackbar("Error", "Terjadi kesalahan saat login: $e");
     }
   }
 

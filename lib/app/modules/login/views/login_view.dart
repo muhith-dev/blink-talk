@@ -150,27 +150,23 @@ class LoginView extends GetView<LoginController> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 0.5),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  5.0,
-                                ), //                 <--- border radius here
+                          OutlinedButton(
+                            onPressed:
+                                controller.isLoading.value
+                                    ? null
+                                    : controller.signInWithGoogle,
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(width: 0.5, color: Colors.black),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
                               ),
+                              fixedSize: Size(70, 49),
+                              padding: EdgeInsets.all(10),
                             ),
-                            width: 70,
-                            height: 49,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                top: 15,
-                                bottom: 15,
-                                left: 25,
-                                right: 25,
-                              ),
-                              child: Image(
-                                image: AssetImage('assets/icons/google.png'),
-                              ),
+                            child: Image.asset(
+                              'assets/icons/google.png',
+                              width: 24,
+                              height: 24,
                             ),
                           ),
                           Container(
