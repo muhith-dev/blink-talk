@@ -25,7 +25,7 @@ class RegisterView extends GetView<RegisterController> {
             top: 300,
             left: 0,
             right: 0,
-            bottom: 0, // penting untuk height penuh dari posisi top
+            bottom: 0,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,

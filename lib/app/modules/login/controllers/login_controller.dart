@@ -108,6 +108,10 @@ class LoginController extends GetxController {
       if (user != null) {
         print("Login sukses: ${user.displayName} (${user.email})");
 
+        final token = googleAuth.accessToken;
+
+        await AuthService.saveToken(token!);
+
         Get.snackbar("Sukses", "Login Google berhasil");
         Get.offAllNamed('/home');
       }

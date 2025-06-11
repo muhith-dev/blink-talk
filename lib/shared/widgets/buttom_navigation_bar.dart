@@ -18,7 +18,7 @@ class BottomNavBar extends StatelessWidget {
             Get.toNamed(Routes.DEALING_WITH_MODEL);
             break;
           case 2:
-            Get.toNamed(Routes.DEALING_WITH_MODEL);
+            Get.toNamed(Routes.CHART);
             break;
           case 3:
             Get.toNamed(Routes.ABOUT);
@@ -46,7 +46,7 @@ class BottomNavBar extends StatelessWidget {
           icon: SizedBox(
             width: 24,
             height: 24,
-            child: Image.asset('assets/images/navbar/hospital.png'),
+            child: Image.asset('assets/images/navbar/stats .png'),
           ),
           label: '',
         ),
@@ -69,7 +69,7 @@ class BottomNavBar extends StatelessWidget {
         return 0;
       case Routes.DEALING_WITH_MODEL:
         return 1;
-      case Routes.DEALING_WITH_MODEL:
+      case Routes.CHART:
         return 2;
       case Routes.ABOUT:
         return 3;

@@ -185,29 +185,39 @@ class DealingWithModelController extends GetxController {
     return Container(
       color: Colors.white,
       height: 70,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.person, color: Colors.grey),
           ),
-          Obx(
-            () => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  firstName.value,
-                  style: TextStyle(
-                    color: Color(0xff496173),
-                    fontWeight: FontWeight.bold,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    firstName.value,
+                    style: const TextStyle(
+                      color: Color(0xff496173),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Text(email.value, style: TextStyle(color: Colors.grey)),
-              ],
+                  Text(
+                    email.value,
+                    style: const TextStyle(color: Colors.grey),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
           ),
-          const Spacer(),
           IconButton(
             onPressed: () async {
               await FirebaseAuth.instance.signOut();

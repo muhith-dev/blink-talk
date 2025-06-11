@@ -1,3 +1,5 @@
+import 'package:blink_talk/app/modules/chart/bindings/chart_binding.dart';
+import 'package:blink_talk/app/modules/chart/views/chart_page.dart';
 import 'package:get/get.dart';
 
 import '../modules/about/bindings/about_binding.dart';
@@ -50,6 +52,11 @@ class AppPages {
       name: _Paths.ABOUT,
       page: () => const AboutView(),
       binding: AboutBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHART,
+      page: () => const ChartPage(),
+      binding: ChartBinding(),
     ),
   ];
 }
