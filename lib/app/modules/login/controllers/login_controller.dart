@@ -32,6 +32,7 @@ class LoginController extends GetxController {
     final String baseUrlCloud = controller.backendAPI.value;
     final String apiKeyCloud = controller.backendApiKey.value;
     final String apiUrl = "$baseUrlCloud/api/auth/login";
+    final String apiUrlSendOTP = "$baseUrlCloud/api/auth/send_otp_email";
     final String apiKey = "$apiKeyCloud";
     print("Base URL: ${controller.backendAPI.value}");
     print("API URL: $apiUrl");
@@ -55,6 +56,22 @@ class LoginController extends GetxController {
 
         Get.offAllNamed('/home');
         Get.snackbar('Success', 'Login berhasil!');
+      } else if (response.statusCode == 401) {
+        Get.snackbar(
+          'Verification Required',
+          'Email Anda perlu diverifikasi.',
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+        );
+        http.post(
+          Uri.parse(apiUrlSendOTP),
+          headers: {'Content-Type': 'application/json', 'x-api-key': apiKey},
+          body: jsonEncode({
+            "email": emailController.text.trim(),
+          }),
+        );
+        Get.offAllNamed('/verification',
+            arguments: {"email": emailController.text.trim()});
       } else {
         Get.snackbar(
           'Login Failed',
@@ -101,8 +118,8 @@ class LoginController extends GetxController {
       );
 
       // Login ke Firebase
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       User? user = userCredential.user;
 
       if (user != null) {

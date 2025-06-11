@@ -22,6 +22,7 @@ class RegisterController extends GetxController {
     final String baseUrlCloud = controller.backendAPI.value;
     final String apiKeyCloud = controller.backendApiKey.value;
     final String apiUrl = "$baseUrlCloud/api/auth/register";
+    final String apiUrlSendOTP = "$baseUrlCloud/api/auth/send_otp_email";
     final String apiKey = "$apiKeyCloud";
 
     try {
@@ -41,7 +42,15 @@ class RegisterController extends GetxController {
         final data = jsonDecode(response.body);
 
         if (response.statusCode == 201) {
-          Get.offAllNamed('/verrification');
+          http.post(
+            Uri.parse(apiUrlSendOTP),
+            headers: {'Content-Type': 'application/json', 'x-api-key': apiKey},
+            body: jsonEncode({
+              "email": emailController.text.trim(),
+            }),
+          );
+          Get.offAllNamed('/verification',
+              arguments: {"email": emailController.text.trim()});
           Get.snackbar('Success', 'Register berhasil!');
         } else {
           Get.snackbar(
@@ -98,8 +107,8 @@ class RegisterController extends GetxController {
       );
 
       // Login ke Firebase
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       User? user = userCredential.user;
 
       if (user != null) {
@@ -116,5 +125,12 @@ class RegisterController extends GetxController {
 
   void navigateToLogin() {
     Get.toNamed('/login');
+  }
+
+  Future<void> sendOTPEmail() async {
+    final String baseUrlCloud = controller.backendAPI.value;
+    final String apiKeyCloud = controller.backendApiKey.value;
+    final String apiUrl = "$baseUrlCloud/api/auth/send_otp_email";
+    final String apiKey = "$apiKeyCloud";
   }
 }
