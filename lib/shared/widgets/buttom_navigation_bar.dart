@@ -46,7 +46,7 @@ class BottomNavBar extends StatelessWidget {
           icon: SizedBox(
             width: 24,
             height: 24,
-            child: Image.asset('assets/images/navbar/stats .png'),
+            child: Image.asset('assets/images/navbar/stats.png'),
           ),
           label: '',
         ),
