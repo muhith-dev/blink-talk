@@ -8,11 +8,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../data/services/api_service.dart';
+import '../../user_history/controllers/user_history_controller.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final ApiController controller = Get.put(ApiController());
+  final historyController = Get.put(UserHistoryController());
 
   var isLoading = false.obs;
 
@@ -53,6 +55,9 @@ class LoginController extends GetxController {
         final user = data['user'];
 
         await AuthService.saveToken(token);
+
+        await historyController.saveLoginHistory(
+            emailController.text.trim(), 'Email');
 
         Get.offAllNamed('/home');
         Get.snackbar('Success', 'Login berhasil!');
@@ -125,6 +130,8 @@ class LoginController extends GetxController {
 
       if (user != null) {
         print("Login sukses: ${user.displayName} (${user.email})");
+
+        await historyController.saveLoginHistory(user.email ?? '', 'Google');
 
         final token = googleAuth.accessToken;
 

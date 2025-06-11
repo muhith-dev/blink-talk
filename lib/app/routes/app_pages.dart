@@ -14,6 +14,8 @@ import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/user_history/bindings/user_history_binding.dart';
+import '../modules/user_history/views/user_history_view.dart';
 import '../modules/verification/bindings/verification_binding.dart';
 import '../modules/verification/views/verification_view.dart';
 import '../modules/verification_success/bindings/verification_success_binding.dart';
@@ -71,6 +73,11 @@ class AppPages {
       name: _Paths.VERIFICATION_SUCCESS,
       page: () => const VerificationSuccessView(),
       binding: VerificationSuccessBinding(),
+    ),
+    GetPage(
+      name: _Paths.USER_HISTORY,
+      page: () => const UserHistoryView(),
+      binding: UserHistoryBinding(),
     ),
   ];
 }

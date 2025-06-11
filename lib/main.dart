@@ -18,6 +18,9 @@ Future<void> main() async {
 
   runApp(
     GetMaterialApp(
+      theme: ThemeData(
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: Colors.yellow)),
       title: "Application",
       initialRoute: isLoggedIn ? '/home' : '/login',
       getPages: AppPages.routes,

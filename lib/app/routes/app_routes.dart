@@ -12,6 +12,7 @@ abstract class Routes {
   static const CHART = _Paths.CHART;
   static const VERIFICATION = _Paths.VERIFICATION;
   static const VERIFICATION_SUCCESS = _Paths.VERIFICATION_SUCCESS;
+  static const USER_HISTORY = _Paths.USER_HISTORY;
 }
 
 abstract class _Paths {
@@ -25,4 +26,5 @@ abstract class _Paths {
   static const CHART = '/chart';
   static const VERIFICATION = '/verification';
   static const VERIFICATION_SUCCESS = '/verification-success';
+  static const USER_HISTORY = '/user-history';
 }
