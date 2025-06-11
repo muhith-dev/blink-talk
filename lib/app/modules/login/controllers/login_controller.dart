@@ -56,7 +56,8 @@ class LoginController extends GetxController {
 
         Get.offAllNamed('/home');
         Get.snackbar('Success', 'Login berhasil!');
-      } else if (response.statusCode == 401) {
+      } else if (data['email_verified'] == false) {
+        print("error : $response");
         Get.snackbar(
           'Verification Required',
           'Email Anda perlu diverifikasi.',
