@@ -41,7 +41,7 @@ class RegisterController extends GetxController {
         final data = jsonDecode(response.body);
 
         if (response.statusCode == 201) {
-          Get.offAllNamed('/login');
+          Get.offAllNamed('/verrification');
           Get.snackbar('Success', 'Register berhasil!');
         } else {
           Get.snackbar(

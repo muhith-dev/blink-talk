@@ -1,9 +1,9 @@
-import 'package:blink_talk/app/modules/chart/bindings/chart_binding.dart';
-import 'package:blink_talk/app/modules/chart/views/chart_page.dart';
 import 'package:get/get.dart';
 
 import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
+import '../modules/chart/bindings/chart_binding.dart';
+import '../modules/chart/views/chart_page.dart';
 import '../modules/dealing_with_model/bindings/dealing_with_model_binding.dart';
 import '../modules/dealing_with_model/views/dealing_with_model_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -14,6 +14,8 @@ import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/verification/bindings/verification_binding.dart';
+import '../modules/verification/views/verification_view.dart';
 
 part 'app_routes.dart';
 
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.CHART,
       page: () => const ChartPage(),
       binding: ChartBinding(),
+    ),
+    GetPage(
+      name: _Paths.VERIFICATION,
+      page: () => const VerificationView(),
+      binding: VerificationBinding(),
     ),
   ];
 }

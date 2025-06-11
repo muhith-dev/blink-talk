@@ -10,6 +10,7 @@ abstract class Routes {
   static const DEALING_WITH_MODEL = _Paths.DEALING_WITH_MODEL;
   static const ABOUT = _Paths.ABOUT;
   static const CHART = _Paths.CHART;
+  static const VERIFICATION = _Paths.VERIFICATION;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const DEALING_WITH_MODEL = '/dealing-with-model';
   static const ABOUT = '/about';
   static const CHART = '/chart';
+  static const VERIFICATION = '/verification';
 }
