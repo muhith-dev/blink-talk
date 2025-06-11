@@ -54,7 +54,7 @@ class VerificationController extends GetxController {
 
         if (response.statusCode == 200) {
           Get.snackbar("Berhasil", "OTP berhasil diverifikasi silahkan login");
-          Get.offAllNamed("/login");
+          Get.offAllNamed("/verification-success");
         } else {
           Get.snackbar(
               "Gagal", data['message'] ?? "OTP salah atau tidak valid");

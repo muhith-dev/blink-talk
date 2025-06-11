@@ -16,6 +16,8 @@ import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/verification/bindings/verification_binding.dart';
 import '../modules/verification/views/verification_view.dart';
+import '../modules/verification_success/bindings/verification_success_binding.dart';
+import '../modules/verification_success/views/verification_success_view.dart';
 
 part 'app_routes.dart';
 
@@ -64,6 +66,11 @@ class AppPages {
       name: _Paths.VERIFICATION,
       page: () => const VerificationView(),
       binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.VERIFICATION_SUCCESS,
+      page: () => const VerificationSuccessView(),
+      binding: VerificationSuccessBinding(),
     ),
   ];
 }

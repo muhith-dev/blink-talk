@@ -13,7 +13,7 @@ class VerificationView extends GetView<VerificationController> {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                Get.toNamed('/register');
+                Get.offAllNamed('/login');
               },
               icon: Icon(Icons.arrow_back)),
         ),
