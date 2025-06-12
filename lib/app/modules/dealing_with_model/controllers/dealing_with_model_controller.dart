@@ -223,6 +223,7 @@ class DealingWithModelController extends GetxController {
               await FirebaseAuth.instance.signOut();
               await GoogleSignIn().signOut();
               await AuthService.clearToken();
+              await AuthService.clearEmail();
               Get.offAllNamed('/login');
             },
             icon: const Icon(Icons.exit_to_app, color: Colors.blue, size: 18),

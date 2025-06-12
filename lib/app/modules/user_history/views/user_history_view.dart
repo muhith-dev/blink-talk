@@ -31,7 +31,8 @@ class UserHistoryView extends GetView<UserHistoryController> {
                 return ListTile(
                   leading: const Icon(Icons.history),
                   title: Text(item['email']),
-                  subtitle: Text('${item['method']} | ${item['timestamp']}'),
+                  subtitle: Text(
+                      '${item['method']} | ${controller.formatTimestamp(item['timestamp'])}'),
                 );
               },
             );
@@ -40,7 +41,7 @@ class UserHistoryView extends GetView<UserHistoryController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          controller.printRawStorageData();
+          controller.readAllData();
           final confirm = await Get.dialog(
             AlertDialog(
               title: const Text("Hapus Riwayat?"),

@@ -7,7 +7,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 class ChartController extends GetxController {
   var barChartData = <BarChartGroupData>[].obs;
   final mongoUrl =
-      "mongodb+srv://abdulmuhith:DDyGKJWwRAHHW2pY@cluster0.5ha8rrf.mongodb.net/sign_language_db?retryWrites=true&w=majority";
+      "mongodb+srv://abdulmuhithnawawi:DDyGKJWwRAHHW2pY@cluster0.5ha8rrf.mongodb.net/sign_language_db?retryWrites=true&w=majority";
 
   @override
   void onInit() {

@@ -53,15 +53,19 @@ class LoginController extends GetxController {
       if (response.statusCode == 200) {
         final token = data['token'];
         final user = data['user'];
+        final email = user['email'];
+
+        print(data);
 
         await AuthService.saveToken(token);
+        await AuthService.saveEmail(email);
 
         await historyController.saveLoginHistory(
             emailController.text.trim(), 'Email');
 
         Get.offAllNamed('/home');
         Get.snackbar('Success', 'Login berhasil!');
-      } else if (data['email_verified'] == false) {
+      } else if (data['email_verified'] != true) {
         print("error : $response");
         Get.snackbar(
           'Verification Required',
@@ -134,8 +138,10 @@ class LoginController extends GetxController {
         await historyController.saveLoginHistory(user.email ?? '', 'Google');
 
         final token = googleAuth.accessToken;
+        final email = googleUser.email;
 
         await AuthService.saveToken(token!);
+        await AuthService.saveEmail(email);
 
         Get.snackbar("Sukses", "Login Google berhasil");
         Get.offAllNamed('/home');
