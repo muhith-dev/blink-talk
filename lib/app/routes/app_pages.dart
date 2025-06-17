@@ -14,6 +14,8 @@ import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/streamlit/bindings/streamlit_binding.dart';
+import '../modules/streamlit/views/streamlit_view.dart';
 import '../modules/user_history/bindings/user_history_binding.dart';
 import '../modules/user_history/views/user_history_view.dart';
 import '../modules/verification/bindings/verification_binding.dart';
@@ -78,6 +80,11 @@ class AppPages {
       name: _Paths.USER_HISTORY,
       page: () => const UserHistoryView(),
       binding: UserHistoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.STREAMLIT,
+      page: () => const StreamlitView(),
+      binding: StreamlitBinding(),
     ),
   ];
 }
