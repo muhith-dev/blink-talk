@@ -14,6 +14,7 @@ abstract class Routes {
   static const VERIFICATION_SUCCESS = _Paths.VERIFICATION_SUCCESS;
   static const USER_HISTORY = _Paths.USER_HISTORY;
   static const STREAMLIT = _Paths.STREAMLIT;
+  static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const VERIFICATION_SUCCESS = '/verification-success';
   static const USER_HISTORY = '/user-history';
   static const STREAMLIT = '/streamlit';
+  static const EDIT_PROFILE = '/edit-profile';
 }

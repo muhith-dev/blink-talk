@@ -19,16 +19,16 @@ class LoginController extends GetxController {
   var isLoading = false.obs;
 
   Future<void> login() async {
-    // if (controller.backendAPI.value.isEmpty ||
-    //     controller.backendAPI.value == "Not Available") {
-    //   Get.snackbar(
-    //     'Error',
-    //     'API belum tersedia. Pastikan koneksi internet dan coba lagi.',
-    //     backgroundColor: Colors.red,
-    //     colorText: Colors.white,
-    //   );
-    //   return;
-    // }
+    if (emailController.text.trim().isEmpty ||
+        passwordController.text.trim().isEmpty) {
+      Get.snackbar(
+        'Input Tidak Lengkap',
+        'Email dan password tidak boleh kosong.',
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
 
     isLoading.value = true;
     final String baseUrlCloud = controller.backendAPI.value;

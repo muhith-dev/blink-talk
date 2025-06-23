@@ -6,6 +6,8 @@ import '../modules/chart/bindings/chart_binding.dart';
 import '../modules/chart/views/chart_page.dart';
 import '../modules/dealing_with_model/bindings/dealing_with_model_binding.dart';
 import '../modules/dealing_with_model/views/dealing_with_model_view.dart';
+import '../modules/edit_profile/bindings/edit_profile_binding.dart';
+import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -85,6 +87,11 @@ class AppPages {
       name: _Paths.STREAMLIT,
       page: () => const StreamlitView(),
       binding: StreamlitBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_PROFILE,
+      page: () => const EditProfileView(),
+      binding: EditProfileBinding(),
     ),
   ];
 }

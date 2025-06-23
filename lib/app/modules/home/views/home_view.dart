@@ -135,7 +135,7 @@ class HomeView extends GetView<HomeController> {
               left: 10,
               child: InkWell(
                 onTap: () {
-                  Get.toNamed('/user-history');
+                  Get.toNamed('/edit-profile');
                 },
                 child: Container(
                     width: 375,
