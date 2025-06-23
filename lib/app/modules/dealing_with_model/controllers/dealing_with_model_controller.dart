@@ -15,6 +15,7 @@ class DealingWithModelController extends GetxController {
   final ApiController controller = Get.put(ApiController());
   var firstName = ''.obs;
   var email = ''.obs;
+  var img = ''.obs;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CameraController? cameraController;
@@ -55,7 +56,7 @@ class DealingWithModelController extends GetxController {
     try {
       if (cameras == null || cameras!.isEmpty) return;
 
-      cameraController = CameraController(cameras![1], ResolutionPreset.medium);
+      cameraController = CameraController(cameras![1], ResolutionPreset.max);
 
       await cameraController!.initialize();
       isCameraActive.value = true;
@@ -116,9 +117,11 @@ class DealingWithModelController extends GetxController {
 
         firstName.value = firebaseUser.displayName ?? 'Tanpa Nama';
         email.value = firebaseUser.email ?? 'Tanpa Email';
+        img.value = firebaseUser.photoURL ?? 'Tanpa Foto';
 
         print("Nama: ${firstName.value}");
         print("Email: ${email.value}");
+        print("Photo: ${img.value}");
         return;
       }
 
@@ -188,9 +191,9 @@ class DealingWithModelController extends GetxController {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.person, color: Colors.grey),
+          CircleAvatar(
+            backgroundImage: NetworkImage(img.value),
+            radius: 25,
           ),
           const SizedBox(width: 8),
           Expanded(

@@ -19,36 +19,37 @@ class DealingWithModelView extends GetView<DealingWithModelController> {
           Stack(
             children: [
               Container(
-                padding: const EdgeInsets.only(top: 180.0),
-                color: const Color(0xff3E83FC),
-                height: 550,
-                width: double.infinity,
-                child: const Center(
-                  child: Text(
-                    'What the patient say show here',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-              ),
+                  padding: const EdgeInsets.only(top: 180.0),
+                  color: const Color(0xff3E83FC),
+                  height: 610,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 280,
+                      ),
+                      Text(
+                        'What the patient say show here',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ],
+                  )),
               Obx(
-                () => ClipPath(
-                  clipper: CustomClipPath(),
-                  child:
-                      controller.isCameraActive.value
-                          ? AspectRatio(
-                            aspectRatio:
-                                controller.cameraController!.value.aspectRatio,
-                            child: CameraPreview(controller.cameraController!),
-                          )
-                          : Container(
-                            height: 270,
-                            width: double.infinity,
-                            color: Colors.black,
-                            child: Lottie.asset(
-                              'assets/animations/dealing.json',
-                              fit: BoxFit.cover,
-                            ),
+                () => Container(
+                  child: controller.isCameraActive.value
+                      ? AspectRatio(
+                          aspectRatio: 1 / 1,
+                          child: CameraPreview(controller.cameraController!),
+                        )
+                      : Container(
+                          height: 400,
+                          width: double.infinity,
+                          color: Colors.black,
+                          child: Lottie.asset(
+                            'assets/animations/dealing.json',
+                            fit: BoxFit.cover,
                           ),
+                        ),
                 ),
               ),
               Padding(
@@ -100,19 +101,19 @@ class DealingWithModelView extends GetView<DealingWithModelController> {
   }
 }
 
-class CustomClipPath extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    double w = size.width;
-    double h = size.height;
-    path.lineTo(0, 200);
-    path.quadraticBezierTo(w * 0.5, h + 70, w, 200);
-    path.lineTo(w, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
+// class CustomClipPath extends CustomClipper<Path> {
+//   @override
+//   Path getClip(Size size) {
+//     var path = Path();
+//     double w = size.width;
+//     double h = size.height;
+//     path.lineTo(0, 200);
+//     path.quadraticBezierTo(w * 0.5, h + 70, w, 200);
+//     path.lineTo(w, 0);
+//     path.close();
+//     return path;
+//   }
+//
+//   @override
+//   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+// }

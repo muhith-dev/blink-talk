@@ -22,7 +22,7 @@ Future<void> main() async {
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
               backgroundColor: Colors.yellow)),
       title: "Application",
-      initialRoute: isLoggedIn ? '/login' : '/home',
+      initialRoute: isLoggedIn ? '/home' : '/login',
       getPages: AppPages.routes,
     ),
   );
