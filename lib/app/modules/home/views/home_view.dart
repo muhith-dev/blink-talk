@@ -1,7 +1,6 @@
 import 'package:blink_talk/app/modules/learn/learn_1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../shared/widgets/buttom_navigation_bar.dart';
 import '../controllers/home_controller.dart';
@@ -139,28 +138,47 @@ class HomeView extends GetView<HomeController> {
                   Get.toNamed('/user-history');
                 },
                 child: Container(
-                    width: 150,
-                    height: 50,
+                    width: 375,
+                    height: 65,
                     decoration: BoxDecoration(
-                        color: Colors.yellow,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(19)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.manage_history),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'login history',
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
+                      child: Obx(
+                        () => Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(controller.img.value),
+                              radius: 25,
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  controller.firstName.value,
+                                  style: const TextStyle(
+                                    color: Color(0xff496173),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  controller.email.value,
+                                  style: const TextStyle(color: Colors.grey),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     )),
               )),
