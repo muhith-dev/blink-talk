@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
+import '../modules/app_menu/bindings/app_menu_binding.dart';
+import '../modules/app_menu/views/app_menu_view.dart';
 import '../modules/chart/bindings/chart_binding.dart';
 import '../modules/chart/views/chart_page.dart';
 import '../modules/dealing_with_model/bindings/dealing_with_model_binding.dart';
@@ -92,6 +94,11 @@ class AppPages {
       name: _Paths.EDIT_PROFILE,
       page: () => const EditProfileView(),
       binding: EditProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.APP_MENU,
+      page: () => const AppMenuView(),
+      binding: AppMenuBinding(),
     ),
   ];
 }

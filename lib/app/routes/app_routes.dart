@@ -15,6 +15,7 @@ abstract class Routes {
   static const USER_HISTORY = _Paths.USER_HISTORY;
   static const STREAMLIT = _Paths.STREAMLIT;
   static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
+  static const APP_MENU = _Paths.APP_MENU;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const USER_HISTORY = '/user-history';
   static const STREAMLIT = '/streamlit';
   static const EDIT_PROFILE = '/edit-profile';
+  static const APP_MENU = '/app-menu';
 }
