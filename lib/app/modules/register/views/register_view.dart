@@ -20,7 +20,6 @@ class RegisterView extends GetView<RegisterController> {
               child: Lottie.asset('assets/animations/auth.json', height: 300),
             ),
           ),
-
           Positioned(
             top: 300,
             left: 0,
@@ -118,6 +117,22 @@ class RegisterView extends GetView<RegisterController> {
                         controller: controller.passwordController,
                         keyboardType: TextInputType.visiblePassword,
                       ),
+                      SizedBox(height: 12),
+                      Text(
+                        'Confirm Password',
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      CustomTextField(
+                        obscureText: true,
+                        hintText: 'Enter your password',
+                        controller: controller.confirmPasswordController,
+                        keyboardType: TextInputType.visiblePassword,
+                      ),
                       SizedBox(height: 35),
                       Container(
                         width: 370,
@@ -131,19 +146,18 @@ class RegisterView extends GetView<RegisterController> {
                           ),
                           onPressed: controller.register,
                           child: Obx(
-                            () =>
-                                controller.isLoading.value
-                                    ? CircularProgressIndicator(
+                            () => controller.isLoading.value
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    'Sign Up',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                    )
-                                    : Text(
-                                      'Sign Up',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
                                     ),
+                                  ),
                           ),
                         ),
                       ),
@@ -169,10 +183,9 @@ class RegisterView extends GetView<RegisterController> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           OutlinedButton(
-                            onPressed:
-                                controller.isLoading.value
-                                    ? null
-                                    : controller.signInWithGoogle,
+                            onPressed: controller.isLoading.value
+                                ? null
+                                : controller.signInWithGoogle,
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(width: 0.5, color: Colors.black),
                               shape: RoundedRectangleBorder(

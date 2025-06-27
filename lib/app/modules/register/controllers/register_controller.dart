@@ -13,6 +13,8 @@ class RegisterController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final ApiController controller = Get.put(ApiController());
 
   var isLoading = false.obs;
@@ -34,6 +36,7 @@ class RegisterController extends GetxController {
           "username": usernameController.text.trim(),
           "email": emailController.text.trim(),
           "password": passwordController.text.trim(),
+          "confirm_password": confirmPasswordController.text.trim()
         }),
       );
 
