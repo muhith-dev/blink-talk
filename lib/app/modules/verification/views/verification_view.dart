@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pinput/pinput.dart';
 
 import '../controllers/verification_controller.dart';
 
@@ -65,120 +65,24 @@ class VerificationView extends GetView<VerificationController> {
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          height: 75,
-                          width: 59,
-                          child: TextField(
-                            controller: controller.otp1Controller,
-                            onChanged: (value) {
-                              if (value.length == 1) {
-                                FocusScope.of(context).nextFocus();
-                              }
-                            },
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(1),
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
+                        Pinput(
+                          length: 6,
+                          showCursor: true,
+                          defaultPinTheme: PinTheme(
+                            width: 51,
+                            height: 51,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.grey)),
+                            textStyle: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
                           ),
-                        ),
-                        SizedBox(
-                          height: 75,
-                          width: 49,
-                          child: TextField(
-                            controller: controller.otp2Controller,
-                            onChanged: (value) {
-                              if (value.length == 1) {
-                                FocusScope.of(context).nextFocus();
-                              }
-                            },
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(1),
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 75,
-                          width: 59,
-                          child: TextField(
-                            controller: controller.otp3Controller,
-                            onChanged: (value) {
-                              if (value.length == 1) {
-                                FocusScope.of(context).nextFocus();
-                              }
-                            },
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(1),
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 75,
-                          width: 59,
-                          child: TextField(
-                            controller: controller.otp4Controller,
-                            onChanged: (value) {
-                              if (value.length == 1) {
-                                FocusScope.of(context).nextFocus();
-                              }
-                            },
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(1),
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 75,
-                          width: 59,
-                          child: TextField(
-                            controller: controller.otp5Controller,
-                            onChanged: (value) {
-                              if (value.length == 1) {
-                                FocusScope.of(context).nextFocus();
-                              }
-                            },
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(1),
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 75,
-                          width: 59,
-                          child: TextField(
-                            controller: controller.otp6Controller,
-                            onChanged: (value) {
-                              if (value.length == 1) {
-                                FocusScope.of(context).nextFocus();
-                              }
-                            },
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(1),
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                          ),
-                        ),
+                          onCompleted: (value) {
+                            controller.otpCode = value;
+                          },
+                        )
                       ],
                     ),
                     SizedBox(
@@ -226,15 +130,14 @@ class VerificationView extends GetView<VerificationController> {
                   width: double.infinity,
                   height: 50,
                   child: TextButton(
-                    onPressed: () {
-                      final otp = controller.otp1Controller.text +
-                          controller.otp2Controller.text +
-                          controller.otp3Controller.text +
-                          controller.otp4Controller.text +
-                          controller.otp5Controller.text +
-                          controller.otp6Controller.text;
-                      print(otp);
-                      controller.verifyOtp(email: controller.email, otp: otp);
+                    onPressed: () async {
+                      if (controller.otpCode == null ||
+                          controller.otpCode!.length != 6) {
+                        Get.snackbar("Error", "Kode OTP belum lengkap");
+                        return;
+                      }
+                      controller.verifyOtp(
+                          email: controller.email, otp: controller.otpCode!);
                     },
                     child: Text(
                       "konfirmasi",

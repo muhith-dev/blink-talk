@@ -1,19 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../data/services/api_service.dart';
 
 class VerificationController extends GetxController {
-  final otp1Controller = TextEditingController();
-  final otp2Controller = TextEditingController();
-  final otp3Controller = TextEditingController();
-  final otp4Controller = TextEditingController();
-  final otp5Controller = TextEditingController();
-  final otp6Controller = TextEditingController();
+  String? otpCode;
   final ApiController controller = Get.put(ApiController());
   late String email;
   var secondReaming = 300.obs;
@@ -69,12 +63,6 @@ class VerificationController extends GetxController {
 
   @override
   void onClose() {
-    otp1Controller.dispose();
-    otp2Controller.dispose();
-    otp3Controller.dispose();
-    otp4Controller.dispose();
-    otp5Controller.dispose();
-    otp6Controller.dispose();
     _timer?.cancel();
     super.onClose();
   }
