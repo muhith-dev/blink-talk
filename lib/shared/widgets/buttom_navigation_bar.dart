@@ -1,6 +1,7 @@
 import 'package:blink_talk/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class BottomNavBar extends StatelessWidget {
   @override
@@ -30,7 +31,10 @@ class BottomNavBar extends StatelessWidget {
           icon: SizedBox(
             width: 24,
             height: 24,
-            child: Image.asset('assets/images/navbar/home.png'),
+            child: Icon(
+              Symbols.home,
+              color: Colors.black,
+            ),
           ),
           label: '',
         ),
@@ -38,7 +42,10 @@ class BottomNavBar extends StatelessWidget {
           icon: SizedBox(
             width: 24,
             height: 24,
-            child: Image.asset('assets/images/navbar/restaurant.png'),
+            child: Icon(
+              Symbols.eye_tracking_rounded,
+              color: Colors.black,
+            ),
           ),
           label: '',
         ),
@@ -46,7 +53,10 @@ class BottomNavBar extends StatelessWidget {
           icon: SizedBox(
             width: 24,
             height: 24,
-            child: Image.asset('assets/images/navbar/stats.png'),
+            child: Icon(
+              Icons.insert_chart,
+              color: Colors.black,
+            ),
           ),
           label: '',
         ),
