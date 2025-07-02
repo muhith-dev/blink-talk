@@ -20,55 +20,51 @@ class EditProfileView extends GetView<EditProfileController> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            Obx(() => ProfilePic(
-                  image: controller.img.value,
-                  imageUploadBtnPress: () {},
-                )),
+            ProfilePic(
+              image: controller.img,
+              imageUploadBtnPress: () {},
+            ),
             const Divider(),
             Form(
               child: Column(
                 children: [
-                  Obx(() => UserInfoEditField(
-                        text: "Name",
-                        child: TextFormField(
-                          initialValue: controller.firstName.value,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor:
-                                const Color(0xFF00BF6D).withOpacity(0.05),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16.0 * 1.5, vertical: 16.0),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                            ),
-                          ),
+                  UserInfoEditField(
+                    text: "Name",
+                    child: TextFormField(
+                      controller: controller.name,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0 * 1.5, vertical: 16.0),
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
                         ),
-                      )),
-                  Obx(() => UserInfoEditField(
-                        text: "Email",
-                        child: TextFormField(
-                          initialValue: controller.email.value,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor:
-                                const Color(0xFF00BF6D).withOpacity(0.05),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16.0 * 1.5, vertical: 16.0),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                            ),
-                          ),
+                      ),
+                    ),
+                  ),
+                  UserInfoEditField(
+                    text: "Email",
+                    child: TextFormField(
+                      controller: controller.email,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0 * 1.5, vertical: 16.0),
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                   UserInfoEditField(
                     text: "Old Password",
                     child: TextFormField(
                       obscureText: true,
-                      initialValue: "demopass",
+                      initialValue: "12345678",
                       decoration: InputDecoration(
                         suffixIcon: const Icon(
                           Icons.visibility_off,

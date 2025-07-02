@@ -47,7 +47,14 @@ class ProfileView extends GetView<ProfileController> {
                     shape: const StadiumBorder(),
                   ),
                   onPressed: () {
-                    Get.toNamed('/edit-profile');
+                    Get.toNamed(
+                      '/edit-profile',
+                      arguments: {
+                        'name': controller.firstName.value,
+                        'email': controller.email.value,
+                        'image': controller.img.value, // Kirim juga URL gambar
+                      },
+                    );
                   },
                   child: const Text("Edit profile"),
                 ),
