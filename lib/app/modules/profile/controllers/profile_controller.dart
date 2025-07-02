@@ -9,7 +9,7 @@ import '../../../data/models/login_response.dart';
 import '../../../data/services/api_service.dart';
 import '../../../data/services/auth_service.dart';
 
-class EditProfileController extends GetxController {
+class ProfileController extends GetxController {
   final ApiController controller = Get.put(ApiController());
   var firstName = ''.obs;
   var email = ''.obs;
