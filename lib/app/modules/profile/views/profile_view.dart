@@ -31,6 +31,10 @@ class ProfileView extends GetView<ProfileController> {
                   info: controller.firstName.value,
                 )),
             Obx(() => Info(
+                  infoKey: "Username",
+                  info: controller.userName.value,
+                )),
+            Obx(() => Info(
                   infoKey: "Email Address",
                   info: controller.email.value,
                 )),
@@ -52,7 +56,7 @@ class ProfileView extends GetView<ProfileController> {
                       arguments: {
                         'name': controller.firstName.value,
                         'email': controller.email.value,
-                        'image': controller.img.value, // Kirim juga URL gambar
+                        'image': controller.img.value,
                       },
                     );
                   },

@@ -251,7 +251,11 @@ class AppMenuView extends GetView<AppMenuController> {
                   children: [
                     InkWell(
                       onTap: () {
-                        Get.toNamed('/edit-profile');
+                        Get.toNamed('/edit-profile', arguments: {
+                          'name': controller.firstName.value,
+                          'email': controller.email.value,
+                          'image': controller.img.value,
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
