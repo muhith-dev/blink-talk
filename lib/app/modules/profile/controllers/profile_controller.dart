@@ -15,6 +15,7 @@ class ProfileController extends GetxController {
   var firstName = ''.obs;
   var email = ''.obs;
   var img = ''.obs;
+  var isGoogleLoggedIn = false.obs;
 
   @override
   void onInit() {
@@ -36,6 +37,7 @@ class ProfileController extends GetxController {
       if (firebaseUser != null) {
         print("Login via Google terdeteksi");
 
+        isGoogleLoggedIn.value = true;
         firstName.value = firebaseUser.displayName ?? 'Tanpa Nama';
         email.value = firebaseUser.email ?? 'Tanpa Email';
         img.value = firebaseUser.photoURL ?? 'Tanpa Foto';
@@ -47,6 +49,7 @@ class ProfileController extends GetxController {
         return;
       }
 
+      isGoogleLoggedIn.value = false;
       final String baseUrl = controller.backendAPI.value;
       final String apiUrl = "$baseUrl/api/users/profile";
       final token = await AuthService.getToken();

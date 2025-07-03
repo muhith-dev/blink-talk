@@ -25,6 +25,19 @@ class ProfileView extends GetView<ProfileController> {
                   controller.firstName.value,
                   style: Theme.of(context).textTheme.titleLarge,
                 )),
+            Obx(() => controller.isGoogleLoggedIn.value
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      "Untuk mengedit profil (nama, email, foto), silakan lakukan melalui akun Google Anda.",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey[600],
+                          ),
+                    ),
+                  )
+                : const SizedBox.shrink()),
             const Divider(height: 16.0 * 2),
             Obx(() => Info(
                   infoKey: "Nama",
@@ -42,27 +55,30 @@ class ProfileView extends GetView<ProfileController> {
             Align(
               alignment: Alignment.centerRight,
               child: SizedBox(
-                width: 160,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: const StadiumBorder(),
-                  ),
-                  onPressed: () {
-                    Get.toNamed(
-                      '/edit-profile',
-                      arguments: {
-                        'name': controller.firstName.value,
-                        'email': controller.email.value,
-                        'image': controller.img.value,
-                      },
-                    );
-                  },
-                  child: const Text("Edit profile"),
-                ),
-              ),
+                  width: 160,
+                  child: Obx(
+                    () => ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 48),
+                        shape: const StadiumBorder(),
+                      ),
+                      onPressed: controller.isGoogleLoggedIn.value
+                          ? null
+                          : () {
+                              Get.toNamed(
+                                '/edit-profile',
+                                arguments: {
+                                  'name': controller.firstName.value,
+                                  'email': controller.email.value,
+                                  'image': controller.img.value,
+                                },
+                              );
+                            },
+                      child: const Text("Edit profile"),
+                    ),
+                  )),
             ),
           ],
         ),
