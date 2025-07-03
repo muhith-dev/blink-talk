@@ -11,7 +11,7 @@ import '../../../data/services/auth_service.dart';
 
 class ProfileController extends GetxController {
   final ApiController controller = Get.put(ApiController());
-  var userName = ''.obs;
+  var username = ''.obs;
   var firstName = ''.obs;
   var email = ''.obs;
   var img = ''.obs;
@@ -41,7 +41,7 @@ class ProfileController extends GetxController {
         firstName.value = firebaseUser.displayName ?? 'Tanpa Nama';
         email.value = firebaseUser.email ?? 'Tanpa Email';
         img.value = firebaseUser.photoURL ?? 'Tanpa Foto';
-        userName.value = firebaseUser.phoneNumber ?? 'Tanpa Username';
+        username.value = firebaseUser.phoneNumber ?? 'Tanpa Username';
 
         print("Nama: ${firstName.value}");
         print("Email: ${email.value}");
@@ -73,7 +73,7 @@ class ProfileController extends GetxController {
 
         firstName.value = loginResponse.user.name;
         email.value = loginResponse.user.email;
-        userName.value = loginResponse.user.username;
+        username.value = loginResponse.user.username;
 
         print("Nama: ${firstName.value}");
         print("Email: ${email.value}");

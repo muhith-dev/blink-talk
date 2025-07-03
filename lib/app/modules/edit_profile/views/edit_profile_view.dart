@@ -28,10 +28,26 @@ class EditProfileView extends GetView<EditProfileController> {
             Form(
               child: Column(
                 children: [
+                  // UserInfoEditField(
+                  //   text: "Name",
+                  //   child: TextFormField(
+                  //     controller: controller.name,
+                  //     decoration: InputDecoration(
+                  //       filled: true,
+                  //       fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
+                  //       contentPadding: const EdgeInsets.symmetric(
+                  //           horizontal: 16.0 * 1.5, vertical: 16.0),
+                  //       border: const OutlineInputBorder(
+                  //         borderSide: BorderSide.none,
+                  //         borderRadius: BorderRadius.all(Radius.circular(50)),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   UserInfoEditField(
-                    text: "Name",
+                    text: "Username",
                     child: TextFormField(
-                      controller: controller.name,
+                      controller: controller.username,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
@@ -44,46 +60,32 @@ class EditProfileView extends GetView<EditProfileController> {
                       ),
                     ),
                   ),
-                  UserInfoEditField(
-                    text: "Email",
-                    child: TextFormField(
-                      controller: controller.email,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16.0 * 1.5, vertical: 16.0),
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  UserInfoEditField(
-                    text: "Old Password",
-                    child: TextFormField(
-                      obscureText: true,
-                      initialValue: "12345678",
-                      decoration: InputDecoration(
-                        suffixIcon: const Icon(
-                          Icons.visibility_off,
-                          size: 20,
-                        ),
-                        filled: true,
-                        fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16.0 * 1.5, vertical: 16.0),
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // UserInfoEditField(
+                  //   text: "Old Password",
+                  //   child: TextFormField(
+                  //     obscureText: true,
+                  //     initialValue: "12345678",
+                  //     decoration: InputDecoration(
+                  //       suffixIcon: const Icon(
+                  //         Icons.visibility_off,
+                  //         size: 20,
+                  //       ),
+                  //       filled: true,
+                  //       fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
+                  //       contentPadding: const EdgeInsets.symmetric(
+                  //           horizontal: 16.0 * 1.5, vertical: 16.0),
+                  //       border: const OutlineInputBorder(
+                  //         borderSide: BorderSide.none,
+                  //         borderRadius: BorderRadius.all(Radius.circular(50)),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   UserInfoEditField(
                     text: "New Password",
                     child: TextFormField(
+                      obscureText: true,
+                      controller: controller.newPassword,
                       decoration: InputDecoration(
                         hintText: "New Password",
                         filled: true,
@@ -131,7 +133,9 @@ class EditProfileView extends GetView<EditProfileController> {
                       minimumSize: const Size(double.infinity, 48),
                       shape: const StadiumBorder(),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.editProfile();
+                    },
                     child: const Text("Save Update"),
                   ),
                 ),
