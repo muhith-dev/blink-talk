@@ -82,159 +82,159 @@ class AppMenuView extends GetView<AppMenuController> {
                 SizedBox(
                   height: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    "Histori penggunaan aplikasi",
-                    style: const TextStyle(color: Colors.black),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    height: 120,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(19),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                spreadRadius: 1,
-                                                blurRadius: 10,
-                                                offset: Offset(0, 0.2))
-                                          ]),
-                                      child: Icon(Icons.access_time)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(19),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                spreadRadius: 1,
-                                                blurRadius: 10,
-                                                offset: Offset(0, 0.2))
-                                          ]),
-                                      child: Icon(Icons.access_time)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(19),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                spreadRadius: 1,
-                                                blurRadius: 10,
-                                                offset: Offset(0, 0.2))
-                                          ]),
-                                      child: Icon(Icons.access_time)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(19),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                spreadRadius: 1,
-                                                blurRadius: 10,
-                                                offset: Offset(0, 0.2))
-                                          ]),
-                                      child: Icon(Icons.access_time)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(19),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                spreadRadius: 1,
-                                                blurRadius: 10,
-                                                offset: Offset(0, 0.2))
-                                          ]),
-                                      child: Icon(Icons.access_time)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(19),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                spreadRadius: 1,
-                                                blurRadius: 10,
-                                                offset: Offset(0, 0.2))
-                                          ]),
-                                      child: Icon(Icons.access_time)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(19),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                spreadRadius: 1,
-                                                blurRadius: 10,
-                                                offset: Offset(0, 0.2))
-                                          ]),
-                                      child: Icon(Icons.access_time)),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(16.0),
+                //   child: Text(
+                //     "Histori penggunaan aplikasi",
+                //     style: const TextStyle(color: Colors.black),
+                //     textAlign: TextAlign.start,
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(16.0),
+                //   child: SizedBox(
+                //     height: 120,
+                //     child: ListView(
+                //       scrollDirection: Axis.horizontal,
+                //       children: [
+                //         Column(
+                //           children: [
+                //             Row(
+                //               children: [
+                //                 Padding(
+                //                   padding: const EdgeInsets.all(8.0),
+                //                   child: Container(
+                //                       width: 100,
+                //                       height: 100,
+                //                       decoration: BoxDecoration(
+                //                           color: Colors.white,
+                //                           borderRadius:
+                //                               BorderRadius.circular(19),
+                //                           boxShadow: [
+                //                             BoxShadow(
+                //                                 color: Colors.grey,
+                //                                 spreadRadius: 1,
+                //                                 blurRadius: 10,
+                //                                 offset: Offset(0, 0.2))
+                //                           ]),
+                //                       child: Icon(Icons.access_time)),
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.all(8.0),
+                //                   child: Container(
+                //                       width: 100,
+                //                       height: 100,
+                //                       decoration: BoxDecoration(
+                //                           color: Colors.white,
+                //                           borderRadius:
+                //                               BorderRadius.circular(19),
+                //                           boxShadow: [
+                //                             BoxShadow(
+                //                                 color: Colors.grey,
+                //                                 spreadRadius: 1,
+                //                                 blurRadius: 10,
+                //                                 offset: Offset(0, 0.2))
+                //                           ]),
+                //                       child: Icon(Icons.access_time)),
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.all(8.0),
+                //                   child: Container(
+                //                       width: 100,
+                //                       height: 100,
+                //                       decoration: BoxDecoration(
+                //                           color: Colors.white,
+                //                           borderRadius:
+                //                               BorderRadius.circular(19),
+                //                           boxShadow: [
+                //                             BoxShadow(
+                //                                 color: Colors.grey,
+                //                                 spreadRadius: 1,
+                //                                 blurRadius: 10,
+                //                                 offset: Offset(0, 0.2))
+                //                           ]),
+                //                       child: Icon(Icons.access_time)),
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.all(8.0),
+                //                   child: Container(
+                //                       width: 100,
+                //                       height: 100,
+                //                       decoration: BoxDecoration(
+                //                           color: Colors.white,
+                //                           borderRadius:
+                //                               BorderRadius.circular(19),
+                //                           boxShadow: [
+                //                             BoxShadow(
+                //                                 color: Colors.grey,
+                //                                 spreadRadius: 1,
+                //                                 blurRadius: 10,
+                //                                 offset: Offset(0, 0.2))
+                //                           ]),
+                //                       child: Icon(Icons.access_time)),
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.all(8.0),
+                //                   child: Container(
+                //                       width: 100,
+                //                       height: 100,
+                //                       decoration: BoxDecoration(
+                //                           color: Colors.white,
+                //                           borderRadius:
+                //                               BorderRadius.circular(19),
+                //                           boxShadow: [
+                //                             BoxShadow(
+                //                                 color: Colors.grey,
+                //                                 spreadRadius: 1,
+                //                                 blurRadius: 10,
+                //                                 offset: Offset(0, 0.2))
+                //                           ]),
+                //                       child: Icon(Icons.access_time)),
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.all(8.0),
+                //                   child: Container(
+                //                       width: 100,
+                //                       height: 100,
+                //                       decoration: BoxDecoration(
+                //                           color: Colors.white,
+                //                           borderRadius:
+                //                               BorderRadius.circular(19),
+                //                           boxShadow: [
+                //                             BoxShadow(
+                //                                 color: Colors.grey,
+                //                                 spreadRadius: 1,
+                //                                 blurRadius: 10,
+                //                                 offset: Offset(0, 0.2))
+                //                           ]),
+                //                       child: Icon(Icons.access_time)),
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.all(8.0),
+                //                   child: Container(
+                //                       width: 100,
+                //                       height: 100,
+                //                       decoration: BoxDecoration(
+                //                           color: Colors.white,
+                //                           borderRadius:
+                //                               BorderRadius.circular(19),
+                //                           boxShadow: [
+                //                             BoxShadow(
+                //                                 color: Colors.grey,
+                //                                 spreadRadius: 1,
+                //                                 blurRadius: 10,
+                //                                 offset: Offset(0, 0.2))
+                //                           ]),
+                //                       child: Icon(Icons.access_time)),
+                //                 ),
+                //               ],
+                //             ),
+                //           ],
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
@@ -343,6 +343,58 @@ class AppMenuView extends GetView<AppMenuController> {
                                     children: [
                                       Text(
                                         "Riwayat login",
+                                        style: const TextStyle(
+                                          color: Color(0xff496173),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed('/detection-history');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            width: 375,
+                            height: 65,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(19),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey,
+                                      spreadRadius: 1,
+                                      blurRadius: 10,
+                                      offset: Offset(0, 0.2))
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    child: Icon(Icons.manage_history),
+                                    radius: 20,
+                                    backgroundColor: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Riwayat deteksi",
                                         style: const TextStyle(
                                           color: Color(0xff496173),
                                           fontWeight: FontWeight.bold,

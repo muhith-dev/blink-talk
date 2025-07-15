@@ -8,6 +8,8 @@ import '../modules/chart/bindings/chart_binding.dart';
 import '../modules/chart/views/chart_page.dart';
 import '../modules/dealing_with_model/bindings/dealing_with_model_binding.dart';
 import '../modules/dealing_with_model/views/dealing_with_model_view.dart';
+import '../modules/detection_history/bindings/detection_history_binding.dart';
+import '../modules/detection_history/views/detection_history_view.dart';
 import '../modules/edit_profile/bindings/edit_profile_binding.dart';
 import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETECTION_HISTORY,
+      page: () => const DetectionHistoryView(),
+      binding: DetectionHistoryBinding(),
     ),
   ];
 }

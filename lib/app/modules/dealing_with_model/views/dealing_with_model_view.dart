@@ -166,7 +166,7 @@ class DealingWithModelView extends GetView<DealingWithModelController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Obx(() => _buildDetectionControlButton()),
+                Obx(() => _buildDetectionControlB utton()),
                 const SizedBox(width: 10),
                 Obx(() => ElevatedButton.icon(
                       onPressed: controller.toggleCamera,
@@ -212,7 +212,7 @@ class DealingWithModelView extends GetView<DealingWithModelController> {
           ),
         ],
       ),
-      drawer: controller.buildDrawer(context),
+      // drawer: controller.buildDrawer(context),
       bottomNavigationBar: BottomNavBar(),
     );
   }

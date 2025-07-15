@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:blink_talk/app/modules/detection_history/controllers/detection_history_controller.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:permission_handler/permission_handler.dart';
@@ -18,6 +18,8 @@ import '../../../data/services/auth_service.dart';
 
 class DealingWithModelController extends GetxController {
   final ApiController controller = Get.put(ApiController());
+  final DetectionHistoryController controllerHistory =
+      Get.put(DetectionHistoryController());
   var firstName = ''.obs;
   var email = ''.obs;
   var profileImageUrl = ''.obs;
@@ -38,7 +40,7 @@ class DealingWithModelController extends GetxController {
   var isInCooldown = false.obs;
   var cooldownSeconds = 0.obs;
 
-  static const String _webSocketUrl = 'ws://c5ea0150ac23.ngrok-free.app/ws';
+  static const String _webSocketUrl = 'ws://460264a24011.ngrok-free.app/ws';
 
   static const Duration _frameInterval = Duration(seconds: 2);
   static const Duration _cooldownDuration = Duration(seconds: 5);
@@ -121,9 +123,12 @@ class DealingWithModelController extends GetxController {
 
       _channel!.stream.listen(
         (message) {
+          // DIMODIFIKASI: Handle pesan dan simpan ke storage
           if (message != "Menunggu deteksi..." &&
               message != "Deteksi dihentikan") {
             _startCooldown();
+            // Panggil fungsi untuk menyimpan pesan deteksi
+            controllerHistory.saveDetectionMessage(message);
           }
 
           receivedMessage.value = message;
@@ -149,7 +154,6 @@ class DealingWithModelController extends GetxController {
         receivedMessage.value =
             "Terhubung ke server. Tekan tombol Mulai untuk memulai deteksi.";
       }
-
       print('Connected to WebSocket: $_webSocketUrl');
     } catch (e) {
       print('Could not connect to WebSocket: $e');
@@ -293,6 +297,7 @@ class DealingWithModelController extends GetxController {
     _cooldownTimer?.cancel();
   }
 
+  // Metode lainnya tidak diubah...
   Future<void> getProfile() async {
     try {
       final firebaseUser = FirebaseAuth.instance.currentUser;
@@ -301,11 +306,10 @@ class DealingWithModelController extends GetxController {
         print("Login via Google terdeteksi");
         firstName.value = firebaseUser.displayName ?? 'Tanpa Nama';
         email.value = firebaseUser.email ?? 'Tanpa Email';
-        profileImageUrl.value =
-            firebaseUser.photoURL ?? 'Tanpa Foto'; // Updated
+        profileImageUrl.value = firebaseUser.photoURL ?? 'Tanpa Foto';
         print("Nama: ${firstName.value}");
         print("Email: ${email.value}");
-        print("Photo: ${profileImageUrl.value}"); // Updated
+        print("Photo: ${profileImageUrl.value}");
         return;
       }
 
@@ -368,91 +372,91 @@ class DealingWithModelController extends GetxController {
     }
   }
 
-  Widget buildDrawer(BuildContext context) {
-    return SizedBox(
-      width: 250,
-      child: Drawer(
-        backgroundColor: const Color(0xff3E83FC),
-        child: ListView(
-          children: [
-            const SizedBox(height: 30),
-            _drawerItem(context, 'Learn'),
-            _drawerItem(context, 'Our Book'),
-            _drawerItem(context, 'Language'),
-            _drawerItem(context, 'Contact'),
-            _drawerItem(context, 'Dark Mode'),
-            const SizedBox(height: 270),
-            _buildDrawerFooter(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _drawerItem(BuildContext context, String title) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            title,
-            style: const TextStyle(fontSize: 20, color: Colors.white),
-          ),
-          onTap: () => Navigator.pop(context),
-        ),
-        const SizedBox(height: 15),
-      ],
-    );
-  }
-
-  Widget _buildDrawerFooter() {
-    return Container(
-      color: Colors.white,
-      height: 70,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(profileImageUrl.value), // Updated
-            radius: 25,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Obx(
-              () => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    firstName.value,
-                    style: const TextStyle(
-                      color: Color(0xff496173),
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    email.value,
-                    style: const TextStyle(color: Colors.grey),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          IconButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              await GoogleSignIn().signOut();
-              await AuthService.clearToken();
-              await AuthService.clearEmail();
-              Get.offAllNamed('/login');
-            },
-            icon: const Icon(Icons.exit_to_app, color: Colors.blue, size: 18),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget buildDrawer(BuildContext context) {
+  //   return SizedBox(
+  //     width: 250,
+  //     child: Drawer(
+  //       backgroundColor: const Color(0xff3E83FC),
+  //       child: ListView(
+  //         children: [
+  //           const SizedBox(height: 30),
+  //           // _drawerItem(context, 'Learn'),
+  //           // _drawerItem(context, 'Our Book'),
+  //           // _drawerItem(context, 'Language'),
+  //           // _drawerItem(context, 'Contact'),
+  //           // _drawerItem(context, 'Dark Mode'),
+  //           const SizedBox(height: 270),
+  //           _buildDrawerFooter(),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+  //
+  // Widget _drawerItem(BuildContext context, String title) {
+  //   return Column(
+  //     children: [
+  //       ListTile(
+  //         title: Text(
+  //           title,
+  //           style: const TextStyle(fontSize: 20, color: Colors.white),
+  //         ),
+  //         onTap: () => Navigator.pop(context),
+  //       ),
+  //       const SizedBox(height: 15),
+  //     ],
+  //   );
+  // }
+  //
+  // Widget _buildDrawerFooter() {
+  //   return Container(
+  //     color: Colors.white,
+  //     height: 70,
+  //     padding: const EdgeInsets.symmetric(horizontal: 8),
+  //     child: Row(
+  //       children: [
+  //         CircleAvatar(
+  //           backgroundImage: NetworkImage(profileImageUrl.value),
+  //           radius: 25,
+  //         ),
+  //         const SizedBox(width: 8),
+  //         Expanded(
+  //           child: Obx(
+  //             () => Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 Text(
+  //                   firstName.value,
+  //                   style: const TextStyle(
+  //                     color: Color(0xff496173),
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //                 Text(
+  //                   email.value,
+  //                   style: const TextStyle(color: Colors.grey),
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //         IconButton(
+  //           onPressed: () async {
+  //             await FirebaseAuth.instance.signOut();
+  //             await GoogleSignIn().signOut();
+  //             await AuthService.clearToken();
+  //             await AuthService.clearEmail();
+  //             Get.offAllNamed('/login');
+  //           },
+  //           icon: const Icon(Icons.exit_to_app, color: Colors.blue, size: 18),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

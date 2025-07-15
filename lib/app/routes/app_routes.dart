@@ -17,6 +17,7 @@ abstract class Routes {
   static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
   static const APP_MENU = _Paths.APP_MENU;
   static const PROFILE = _Paths.PROFILE;
+  static const DETECTION_HISTORY = _Paths.DETECTION_HISTORY;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const EDIT_PROFILE = '/edit-profile';
   static const APP_MENU = '/app-menu';
   static const PROFILE = '/profile';
+  static const DETECTION_HISTORY = '/detection-history';
 }
