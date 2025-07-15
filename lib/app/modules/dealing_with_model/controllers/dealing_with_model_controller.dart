@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../data/models/login_response.dart';
 import '../../../data/services/api_service.dart';
@@ -15,12 +20,29 @@ class DealingWithModelController extends GetxController {
   final ApiController controller = Get.put(ApiController());
   var firstName = ''.obs;
   var email = ''.obs;
-  var img = ''.obs;
+  var profileImageUrl = ''.obs;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CameraController? cameraController;
   var isCameraActive = false.obs;
   List<CameraDescription>? cameras;
+
+  WebSocketChannel? _channel;
+  var receivedMessage = "Tekan tombol Mulai untuk memulai deteksi...".obs;
+  Timer? _reconnectTimer;
+  Timer? _frameTimer;
+  Timer? _cooldownTimer;
+  var isWebSocketConnected = false.obs;
+  var isProcessingFrame = false.obs;
+  var isDetectionActive = false.obs;
+  var isInCooldown = false.obs;
+  var cooldownSeconds = 0.obs;
+
+  static const String _webSocketUrl = 'ws://c5ea0150ac23.ngrok-free.app/ws';
+
+  static const Duration _frameInterval = Duration(seconds: 2);
+  static const Duration _cooldownDuration = Duration(seconds: 5);
+  static const Duration _reconnectDelay = Duration(seconds: 5);
 
   @override
   void onInit() {
@@ -35,12 +57,23 @@ class DealingWithModelController extends GetxController {
   }
 
   Future<void> initializeCameras() async {
+    var status = await Permission.camera.request();
+    if (status.isDenied || status.isPermanentlyDenied) {
+      Get.snackbar(
+          'Error', 'Izin kamera diperlukan untuk deteksi kedipan mata');
+      return;
+    }
+
     cameras = await availableCameras();
+    if (cameras != null && cameras!.isNotEmpty) {
+      _connectWebSocket();
+    }
   }
 
   @override
   void onClose() {
     _disposeCamera();
+    _disposeWebSocket();
     super.onClose();
   }
 
@@ -56,7 +89,16 @@ class DealingWithModelController extends GetxController {
     try {
       if (cameras == null || cameras!.isEmpty) return;
 
-      cameraController = CameraController(cameras![1], ResolutionPreset.max);
+      final frontCamera = cameras!.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras![0],
+      );
+
+      cameraController = CameraController(
+        frontCamera,
+        ResolutionPreset.high,
+        enableAudio: false,
+      );
 
       await cameraController!.initialize();
       isCameraActive.value = true;
@@ -70,42 +112,185 @@ class DealingWithModelController extends GetxController {
     cameraController?.dispose();
     cameraController = null;
     isCameraActive.value = false;
+    stopDetection();
   }
 
-  Widget buildDrawer(BuildContext context) {
-    return SizedBox(
-      width: 250,
-      child: Drawer(
-        backgroundColor: const Color(0xff3E83FC),
-        child: ListView(
-          children: [
-            const SizedBox(height: 30),
-            _drawerItem(context, 'Learn'),
-            _drawerItem(context, 'Our Book'),
-            _drawerItem(context, 'Language'),
-            _drawerItem(context, 'Contact'),
-            _drawerItem(context, 'Dark Mode'),
-            const SizedBox(height: 270),
-            _buildDrawerFooter(),
-          ],
-        ),
-      ),
-    );
+  void _connectWebSocket() {
+    try {
+      _channel = WebSocketChannel.connect(Uri.parse(_webSocketUrl));
+
+      _channel!.stream.listen(
+        (message) {
+          if (message != "Menunggu deteksi..." &&
+              message != "Deteksi dihentikan") {
+            _startCooldown();
+          }
+
+          receivedMessage.value = message;
+          isWebSocketConnected.value = true;
+          print('Received from server: $message');
+        },
+        onError: (error) {
+          print('WebSocket error: $error');
+          receivedMessage.value = "Koneksi WebSocket Error: $error";
+          isWebSocketConnected.value = false;
+          _scheduleReconnect();
+        },
+        onDone: () {
+          print('WebSocket connection closed');
+          receivedMessage.value = "Koneksi WebSocket terputus.";
+          isWebSocketConnected.value = false;
+          _scheduleReconnect();
+        },
+      );
+
+      isWebSocketConnected.value = true;
+      if (!isDetectionActive.value) {
+        receivedMessage.value =
+            "Terhubung ke server. Tekan tombol Mulai untuk memulai deteksi.";
+      }
+
+      print('Connected to WebSocket: $_webSocketUrl');
+    } catch (e) {
+      print('Could not connect to WebSocket: $e');
+      receivedMessage.value = "Gagal terhubung ke WebSocket: $e";
+      isWebSocketConnected.value = false;
+      _scheduleReconnect();
+    }
   }
 
-  Widget _drawerItem(BuildContext context, String title) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            title,
-            style: const TextStyle(fontSize: 20, color: Colors.white),
-          ),
-          onTap: () => Navigator.pop(context),
-        ),
-        const SizedBox(height: 15),
-      ],
-    );
+  void _scheduleReconnect() {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(_reconnectDelay, () {
+      print('Mencoba menyambungkan kembali WebSocket...');
+      _connectWebSocket();
+    });
+  }
+
+  void startDetection() {
+    if (!isWebSocketConnected.value) {
+      Get.snackbar('Error',
+          "Tidak terhubung ke server. Mencoba menghubungkan kembali...");
+      _connectWebSocket();
+      return;
+    }
+
+    if (!isCameraActive.value) {
+      Get.snackbar(
+          'Error', "Kamera belum aktif. Aktifkan kamera terlebih dahulu.");
+      return;
+    }
+
+    isDetectionActive.value = true;
+    isInCooldown.value = false;
+    receivedMessage.value = "Deteksi dimulai. Menunggu gerakan mata...";
+
+    _channel?.sink.add('START_DETECTION');
+    _startCameraStream();
+  }
+
+  void stopDetection() {
+    isDetectionActive.value = false;
+    isInCooldown.value = false;
+    cooldownSeconds.value = 0;
+    receivedMessage.value =
+        "Deteksi dihentikan. Tekan tombol Mulai untuk memulai lagi.";
+
+    _channel?.sink.add('STOP_DETECTION');
+    _stopCameraStream();
+    _cooldownTimer?.cancel();
+  }
+
+  void _startCooldown() {
+    if (!isDetectionActive.value) return;
+
+    isInCooldown.value = true;
+    cooldownSeconds.value = _cooldownDuration.inSeconds;
+
+    _cooldownTimer?.cancel();
+    _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      cooldownSeconds.value--;
+
+      if (cooldownSeconds.value <= 0) {
+        timer.cancel();
+        if (isDetectionActive.value) {
+          isInCooldown.value = false;
+          receivedMessage.value = "Deteksi aktif. Menunggu gerakan mata...";
+        }
+      }
+    });
+  }
+
+  void _startCameraStream() {
+    if (cameraController == null || !cameraController!.value.isInitialized) {
+      print("Kamera belum diinisialisasi, tidak bisa memulai stream.");
+      return;
+    }
+
+    _frameTimer?.cancel();
+    _frameTimer = Timer.periodic(_frameInterval, (timer) {
+      if (isWebSocketConnected.value &&
+          isDetectionActive.value &&
+          !isInCooldown.value &&
+          !isProcessingFrame.value) {
+        _captureAndSendFrame();
+      }
+    });
+  }
+
+  void _captureAndSendFrame() async {
+    if (cameraController == null ||
+        !cameraController!.value.isInitialized ||
+        isProcessingFrame.value ||
+        !isDetectionActive.value ||
+        isInCooldown.value) {
+      return;
+    }
+
+    isProcessingFrame.value = true;
+
+    try {
+      final XFile imageFile = await cameraController!.takePicture();
+      final Uint8List imageBytes = await imageFile.readAsBytes();
+
+      final Uint8List? processedBytes = await _processImage(imageBytes);
+
+      if (processedBytes != null &&
+          _channel != null &&
+          isWebSocketConnected.value) {
+        _channel!.sink.add(processedBytes);
+      }
+    } catch (e) {
+      print('Error capturing frame: $e');
+    } finally {
+      isProcessingFrame.value = false;
+    }
+  }
+
+  Future<Uint8List?> _processImage(Uint8List imageBytes) async {
+    try {
+      img.Image? image = img.decodeImage(imageBytes);
+      if (image == null) return null;
+
+      image = img.copyResize(image, width: 320);
+
+      return Uint8List.fromList(img.encodeJpg(image, quality: 70));
+    } catch (e) {
+      print("Error processing image: $e");
+      return null;
+    }
+  }
+
+  void _stopCameraStream() {
+    _frameTimer?.cancel();
+    _frameTimer = null;
+  }
+
+  void _disposeWebSocket() {
+    _stopCameraStream();
+    _channel?.sink.close();
+    _reconnectTimer?.cancel();
+    _cooldownTimer?.cancel();
   }
 
   Future<void> getProfile() async {
@@ -114,14 +299,13 @@ class DealingWithModelController extends GetxController {
 
       if (firebaseUser != null) {
         print("Login via Google terdeteksi");
-
         firstName.value = firebaseUser.displayName ?? 'Tanpa Nama';
         email.value = firebaseUser.email ?? 'Tanpa Email';
-        img.value = firebaseUser.photoURL ?? 'Tanpa Foto';
-
+        profileImageUrl.value =
+            firebaseUser.photoURL ?? 'Tanpa Foto'; // Updated
         print("Nama: ${firstName.value}");
         print("Email: ${email.value}");
-        print("Photo: ${img.value}");
+        print("Photo: ${profileImageUrl.value}"); // Updated
         return;
       }
 
@@ -184,6 +368,42 @@ class DealingWithModelController extends GetxController {
     }
   }
 
+  Widget buildDrawer(BuildContext context) {
+    return SizedBox(
+      width: 250,
+      child: Drawer(
+        backgroundColor: const Color(0xff3E83FC),
+        child: ListView(
+          children: [
+            const SizedBox(height: 30),
+            _drawerItem(context, 'Learn'),
+            _drawerItem(context, 'Our Book'),
+            _drawerItem(context, 'Language'),
+            _drawerItem(context, 'Contact'),
+            _drawerItem(context, 'Dark Mode'),
+            const SizedBox(height: 270),
+            _buildDrawerFooter(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _drawerItem(BuildContext context, String title) {
+    return Column(
+      children: [
+        ListTile(
+          title: Text(
+            title,
+            style: const TextStyle(fontSize: 20, color: Colors.white),
+          ),
+          onTap: () => Navigator.pop(context),
+        ),
+        const SizedBox(height: 15),
+      ],
+    );
+  }
+
   Widget _buildDrawerFooter() {
     return Container(
       color: Colors.white,
@@ -192,7 +412,7 @@ class DealingWithModelController extends GetxController {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(img.value),
+            backgroundImage: NetworkImage(profileImageUrl.value), // Updated
             radius: 25,
           ),
           const SizedBox(width: 8),
