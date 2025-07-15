@@ -22,33 +22,21 @@ class EditProfileView extends GetView<EditProfileController> {
           children: [
             ProfilePic(
               image: controller.img,
-              imageUploadBtnPress: () {},
+              imageUploadBtnPress: () {
+                // TODO: Implement image upload functionality
+                // Anda bisa menambahkan fungsi upload foto di sini
+              },
             ),
             const Divider(),
             Form(
               child: Column(
                 children: [
-                  // UserInfoEditField(
-                  //   text: "Name",
-                  //   child: TextFormField(
-                  //     controller: controller.name,
-                  //     decoration: InputDecoration(
-                  //       filled: true,
-                  //       fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
-                  //       contentPadding: const EdgeInsets.symmetric(
-                  //           horizontal: 16.0 * 1.5, vertical: 16.0),
-                  //       border: const OutlineInputBorder(
-                  //         borderSide: BorderSide.none,
-                  //         borderRadius: BorderRadius.all(Radius.circular(50)),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   UserInfoEditField(
-                    text: "Username",
+                    text: "Name",
                     child: TextFormField(
-                      controller: controller.username,
+                      controller: controller.name,
                       decoration: InputDecoration(
+                        hintText: "Enter your name",
                         filled: true,
                         fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
                         contentPadding: const EdgeInsets.symmetric(
@@ -60,34 +48,12 @@ class EditProfileView extends GetView<EditProfileController> {
                       ),
                     ),
                   ),
-                  // UserInfoEditField(
-                  //   text: "Old Password",
-                  //   child: TextFormField(
-                  //     obscureText: true,
-                  //     initialValue: "12345678",
-                  //     decoration: InputDecoration(
-                  //       suffixIcon: const Icon(
-                  //         Icons.visibility_off,
-                  //         size: 20,
-                  //       ),
-                  //       filled: true,
-                  //       fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
-                  //       contentPadding: const EdgeInsets.symmetric(
-                  //           horizontal: 16.0 * 1.5, vertical: 16.0),
-                  //       border: const OutlineInputBorder(
-                  //         borderSide: BorderSide.none,
-                  //         borderRadius: BorderRadius.all(Radius.circular(50)),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   UserInfoEditField(
-                    text: "New Password",
+                    text: "Username",
                     child: TextFormField(
-                      obscureText: true,
-                      controller: controller.newPassword,
+                      controller: controller.username,
                       decoration: InputDecoration(
-                        hintText: "New Password",
+                        hintText: "Enter your username",
                         filled: true,
                         fillColor: const Color(0xFF00BF6D).withOpacity(0.05),
                         contentPadding: const EdgeInsets.symmetric(
@@ -109,14 +75,16 @@ class EditProfileView extends GetView<EditProfileController> {
                 SizedBox(
                   width: 120,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.back();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context)
                           .textTheme
                           .bodyLarge!
                           .color!
                           .withOpacity(0.08),
-                      foregroundColor: Colors.white,
+                      foregroundColor: Colors.black54,
                       minimumSize: const Size(double.infinity, 48),
                       shape: const StadiumBorder(),
                     ),
