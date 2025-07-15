@@ -25,6 +25,7 @@ class ApiController extends GetxController {
 
   var backendAPI = "".obs;
   var backendApiKey = "".obs;
+  var webSocket = "".obs;
 
   @override
   void onInit() {
@@ -40,6 +41,7 @@ class ApiController extends GetxController {
       final data = await _apiService.fetchAPIData(documentId);
       backendAPI.value = data['backend'] ?? "Not Available";
       backendApiKey.value = data['backendApiKey'] ?? "Not Available";
+      webSocket.value = data['webSocket'] ?? "Not Available";
     } catch (e) {
       print("Error fetching API data: $e");
     }

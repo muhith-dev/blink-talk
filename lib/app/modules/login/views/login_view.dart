@@ -20,7 +20,6 @@ class LoginView extends GetView<LoginController> {
               child: Lottie.asset('assets/animations/auth.json', height: 300),
             ),
           ),
-
           Positioned(
             top: 300,
             left: 0,
@@ -89,17 +88,6 @@ class LoginView extends GetView<LoginController> {
                         keyboardType: TextInputType.text,
                       ),
                       SizedBox(height: 12),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Text(
-                          'Forgot Password ?',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
                       SizedBox(height: 35),
                       Container(
                         width: 370,
@@ -113,19 +101,18 @@ class LoginView extends GetView<LoginController> {
                           ),
                           onPressed: controller.login,
                           child: Obx(
-                            () =>
-                                controller.isLoading.value
-                                    ? CircularProgressIndicator(
+                            () => controller.isLoading.value
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    'Sign in',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                    )
-                                    : Text(
-                                      'Sign in',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
                                     ),
+                                  ),
                           ),
                         ),
                       ),
@@ -151,10 +138,9 @@ class LoginView extends GetView<LoginController> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           OutlinedButton(
-                            onPressed:
-                                controller.isLoading.value
-                                    ? null
-                                    : controller.signInWithGoogle,
+                            onPressed: controller.isLoading.value
+                                ? null
+                                : controller.signInWithGoogle,
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(width: 0.5, color: Colors.black),
                               shape: RoundedRectangleBorder(

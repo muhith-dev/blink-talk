@@ -40,8 +40,6 @@ class DealingWithModelController extends GetxController {
   var isInCooldown = false.obs;
   var cooldownSeconds = 0.obs;
 
-  static const String _webSocketUrl = 'ws://460264a24011.ngrok-free.app/ws';
-
   static const Duration _frameInterval = Duration(seconds: 2);
   static const Duration _cooldownDuration = Duration(seconds: 5);
   static const Duration _reconnectDelay = Duration(seconds: 5);
@@ -119,7 +117,8 @@ class DealingWithModelController extends GetxController {
 
   void _connectWebSocket() {
     try {
-      _channel = WebSocketChannel.connect(Uri.parse(_webSocketUrl));
+      _channel =
+          WebSocketChannel.connect(Uri.parse(controller.webSocket.value));
 
       _channel!.stream.listen(
         (message) {
@@ -154,7 +153,7 @@ class DealingWithModelController extends GetxController {
         receivedMessage.value =
             "Terhubung ke server. Tekan tombol Mulai untuk memulai deteksi.";
       }
-      print('Connected to WebSocket: $_webSocketUrl');
+      print('Connected to WebSocket: ${controller.webSocket.value}');
     } catch (e) {
       print('Could not connect to WebSocket: $e');
       receivedMessage.value = "Gagal terhubung ke WebSocket: $e";
