@@ -40,6 +40,9 @@ class DealingWithModelController extends GetxController {
   var isInCooldown = false.obs;
   var cooldownSeconds = 0.obs;
 
+  var detectedMovements = <String>[].obs;
+  var currentMovement = ''.obs;
+
   static const Duration _frameInterval = Duration(seconds: 2);
   static const Duration _cooldownDuration = Duration(seconds: 5);
   static const Duration _reconnectDelay = Duration(seconds: 5);
@@ -96,7 +99,7 @@ class DealingWithModelController extends GetxController {
 
       cameraController = CameraController(
         frontCamera,
-        ResolutionPreset.high,
+        ResolutionPreset.medium,
         enableAudio: false,
       );
 
@@ -122,17 +125,8 @@ class DealingWithModelController extends GetxController {
 
       _channel!.stream.listen(
         (message) {
-          // DIMODIFIKASI: Handle pesan dan simpan ke storage
-          if (message != "Menunggu deteksi..." &&
-              message != "Deteksi dihentikan") {
-            _startCooldown();
-            // Panggil fungsi untuk menyimpan pesan deteksi
-            controllerHistory.saveDetectionMessage(message);
-          }
-
-          receivedMessage.value = message;
-          isWebSocketConnected.value = true;
-          print('Received from server: $message');
+          // DIMODIFIKASI: Handle pesan dan update detected movements
+          _handleWebSocketMessage(message);
         },
         onError: (error) {
           print('WebSocket error: $error');
@@ -162,6 +156,112 @@ class DealingWithModelController extends GetxController {
     }
   }
 
+  void _handleWebSocketMessage(String message) {
+    receivedMessage.value = message;
+    isWebSocketConnected.value = true;
+
+    _updateDetectedMovements(message);
+
+    // Jika bukan pesan status, simpan ke history dan mulai cooldown
+    if (message != "Menunggu deteksi..." &&
+        message != "Deteksi dihentikan" &&
+        message != "Deteksi dimulai. Menunggu gerakan mata..." &&
+        message != "Deteksi aktif. Menunggu gerakan mata..." &&
+        message !=
+            "Terhubung ke server. Tekan tombol Mulai untuk memulai deteksi." &&
+        !message.contains("Cooldown") &&
+        !message.contains("Terhubung") &&
+        !message.contains("detik")) {
+      _startCooldown();
+      controllerHistory.saveDetectionMessage(message);
+    }
+
+    print('Received from server: $message');
+  }
+
+// PERBAIKAN: Fungsi untuk mengupdate detected movements
+  void _updateDetectedMovements(String message) {
+    print('Processing message for movements: $message'); // Debug log
+
+    // Cek apakah pesan mengandung informasi gerakan dari server Python
+    if (message.contains("Action detected:")) {
+      // Extract movement dari pesan seperti "Action detected: left, Buffer: ['left']"
+      RegExp actionRegex = RegExp(r'Action detected: (\w+)');
+      Match? match = actionRegex.firstMatch(message);
+      if (match != null) {
+        String movement = match.group(1)!;
+        currentMovement.value = movement;
+        print('Current movement updated: $movement'); // Debug log
+
+        // Tambahkan ke list movements dengan timestamp
+        String timestamp = DateTime.now().toString().substring(11, 19);
+        String movementEntry = "$timestamp - $movement";
+        detectedMovements.insert(0, movementEntry);
+        print('Added to movements: $movementEntry'); // Debug log
+
+        // Batasi jumlah movements yang disimpan (maksimal 10)
+        if (detectedMovements.length > 10) {
+          detectedMovements.removeRange(10, detectedMovements.length);
+        }
+      }
+    }
+
+    // TAMBAHAN: Cek apakah ini adalah pesan command yang berhasil dieksekusi
+    // Pesan command biasanya berupa string seperti "Halo!", "Apa kabar?", dll
+    else if (message.length > 0 &&
+        !message.contains("Menunggu") &&
+        !message.contains("Deteksi") &&
+        !message.contains("Cooldown") &&
+        !message.contains("Terhubung") &&
+        !message.contains("detik") &&
+        !message.contains("server") &&
+        !message.contains("dimulai") &&
+        !message.contains("dihentikan") &&
+        message != "Tekan tombol Mulai untuk memulai deteksi...") {
+      // Ini adalah pesan command yang berhasil
+      String timestamp = DateTime.now().toString().substring(11, 19);
+      String commandEntry = "$timestamp - Command: $message";
+      detectedMovements.insert(0, commandEntry);
+      currentMovement.value = "Command executed: $message";
+      print('Command executed: $message'); // Debug log
+
+      // Batasi jumlah movements yang disimpan (maksimal 10)
+      if (detectedMovements.length > 10) {
+        detectedMovements.removeRange(10, detectedMovements.length);
+      }
+    }
+
+    // Extract buffer information jika ada
+    if (message.contains("Buffer:")) {
+      RegExp bufferRegex = RegExp(r'Buffer: \[(.*?)\]');
+      Match? match = bufferRegex.firstMatch(message);
+      if (match != null) {
+        String bufferContent = match.group(1)!;
+        // Update current movement dengan buffer sequence
+        currentMovement.value = "Buffer: $bufferContent";
+        print('Buffer updated: $bufferContent'); // Debug log
+      }
+    }
+  }
+
+// PERBAIKAN: Fungsi untuk clear movements
+  void clearDetectedMovements() {
+    detectedMovements.clear();
+    currentMovement.value = '';
+    print('Movements cleared'); // Debug log
+  }
+
+// PERBAIKAN: Tambahkan fungsi untuk debug
+  void debugCurrentState() {
+    print('=== DEBUG STATE ===');
+    print('Detection active: ${isDetectionActive.value}');
+    print('In cooldown: ${isInCooldown.value}');
+    print('Current movement: ${currentMovement.value}');
+    print('Detected movements count: ${detectedMovements.length}');
+    print('Last received message: ${receivedMessage.value}');
+    print('==================');
+  }
+
   void _scheduleReconnect() {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(_reconnectDelay, () {
@@ -188,6 +288,9 @@ class DealingWithModelController extends GetxController {
     isInCooldown.value = false;
     receivedMessage.value = "Deteksi dimulai. Menunggu gerakan mata...";
 
+    // Clear movements saat mulai deteksi baru
+    clearDetectedMovements();
+
     _channel?.sink.add('START_DETECTION');
     _startCameraStream();
   }
@@ -202,6 +305,9 @@ class DealingWithModelController extends GetxController {
     _channel?.sink.add('STOP_DETECTION');
     _stopCameraStream();
     _cooldownTimer?.cancel();
+
+    // Clear current movement saat stop
+    currentMovement.value = '';
   }
 
   void _startCooldown() {
@@ -370,92 +476,4 @@ class DealingWithModelController extends GetxController {
       print("get user credential error: $e");
     }
   }
-
-  // Widget buildDrawer(BuildContext context) {
-  //   return SizedBox(
-  //     width: 250,
-  //     child: Drawer(
-  //       backgroundColor: const Color(0xff3E83FC),
-  //       child: ListView(
-  //         children: [
-  //           const SizedBox(height: 30),
-  //           // _drawerItem(context, 'Learn'),
-  //           // _drawerItem(context, 'Our Book'),
-  //           // _drawerItem(context, 'Language'),
-  //           // _drawerItem(context, 'Contact'),
-  //           // _drawerItem(context, 'Dark Mode'),
-  //           const SizedBox(height: 270),
-  //           _buildDrawerFooter(),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // Widget _drawerItem(BuildContext context, String title) {
-  //   return Column(
-  //     children: [
-  //       ListTile(
-  //         title: Text(
-  //           title,
-  //           style: const TextStyle(fontSize: 20, color: Colors.white),
-  //         ),
-  //         onTap: () => Navigator.pop(context),
-  //       ),
-  //       const SizedBox(height: 15),
-  //     ],
-  //   );
-  // }
-  //
-  // Widget _buildDrawerFooter() {
-  //   return Container(
-  //     color: Colors.white,
-  //     height: 70,
-  //     padding: const EdgeInsets.symmetric(horizontal: 8),
-  //     child: Row(
-  //       children: [
-  //         CircleAvatar(
-  //           backgroundImage: NetworkImage(profileImageUrl.value),
-  //           radius: 25,
-  //         ),
-  //         const SizedBox(width: 8),
-  //         Expanded(
-  //           child: Obx(
-  //             () => Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 Text(
-  //                   firstName.value,
-  //                   style: const TextStyle(
-  //                     color: Color(0xff496173),
-  //                     fontWeight: FontWeight.bold,
-  //                   ),
-  //                   maxLines: 1,
-  //                   overflow: TextOverflow.ellipsis,
-  //                 ),
-  //                 Text(
-  //                   email.value,
-  //                   style: const TextStyle(color: Colors.grey),
-  //                   maxLines: 1,
-  //                   overflow: TextOverflow.ellipsis,
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //         IconButton(
-  //           onPressed: () async {
-  //             await FirebaseAuth.instance.signOut();
-  //             await GoogleSignIn().signOut();
-  //             await AuthService.clearToken();
-  //             await AuthService.clearEmail();
-  //             Get.offAllNamed('/login');
-  //           },
-  //           icon: const Icon(Icons.exit_to_app, color: Colors.blue, size: 18),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }
