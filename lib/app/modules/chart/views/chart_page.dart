@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../shared/widgets/buttom_navigation_bar.dart';
+import '../../detection_history/views/DetectionHistoryChart.dart';
 import '../controllers/chart_controller.dart';
 
 class ChartPage extends GetView<ChartController> {
@@ -71,11 +72,38 @@ class ChartPage extends GetView<ChartController> {
                     width: 120,
                     height: 50,
                     decoration: BoxDecoration(
-                        color: Colors.yellow,
+                        color: Colors.green,
                         borderRadius: BorderRadius.circular(19)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Image.asset('assets/icons/streamlit.png'),
+                    )),
+              )),
+          Positioned(
+              top: 100,
+              left: 10,
+              child: InkWell(
+                onTap: () {
+                  Get.to(() => DetectionHistoryChart());
+                  ;
+                },
+                child: Container(
+                    width: 138,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(19)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.insert_chart),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text('Chart Deteksi')
+                        ],
+                      ),
                     )),
               )),
         ],

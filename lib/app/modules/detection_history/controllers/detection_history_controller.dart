@@ -7,13 +7,29 @@ class DetectionHistoryController extends GetxController {
   final _storage = const FlutterSecureStorage();
   final String _key = 'detection_history';
 
+  Future<Map<String, int>> getMessageFrequency() async {
+    final history = await getDetectionHistory();
+
+    final Map<String, int> frequencyMap = {};
+
+    for (var item in history) {
+      final message = item['message'] as String;
+
+      frequencyMap[message] = (frequencyMap[message] ?? 0) + 1;
+    }
+
+    print('Hasil Analisa Frekuensi: $frequencyMap');
+    return frequencyMap;
+  }
+
   Future<void> saveDetectionMessage(String message) async {
     final List<String> excludedMessages = [
       'Deteksi dimulai. Menunggu gerakan mata...',
       'Terhubung ke server. Tekan tombol Mulai untuk memulai deteksi.',
     ];
 
-    if (excludedMessages.contains(message)) {
+    if (excludedMessages.contains(message) ||
+        message.startsWith('Action detected:')) {
       print('Pesan "$message" dikecualikan dan tidak disimpan.');
       return;
     }
