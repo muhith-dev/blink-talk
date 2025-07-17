@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:blink_talk/app/data/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,6 +16,19 @@ class LoginController extends GetxController {
   final historyController = Get.put(UserHistoryController());
 
   var isLoading = false.obs;
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    serverClientId:
+        '1066733988309-psaiafconpiimjhf6ie743lfbrn9m9le.apps.googleusercontent.com',
+    scopes: ['email', 'profile'],
+  );
+
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
 
   Future<void> login() async {
     if (emailController.text.trim().isEmpty ||
@@ -105,51 +117,67 @@ class LoginController extends GetxController {
   }
 
   Future<void> signInWithGoogle() async {
+    isLoading.value = true;
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: ['email', 'profile'],
-      );
+      await _googleSignIn.signOut();
 
-      await googleSignIn.signOut(); // optional, untuk logout dulu
-
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
-        print("Login Google dibatalkan pengguna");
-        Get.snackbar("Login Dibatalkan", "Pengguna membatalkan login Google.");
+        Get.snackbar('Batal', 'Login dengan Google dibatalkan.');
+        isLoading.value = false;
         return;
       }
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+      if (idToken == null) {
+        Get.snackbar('Error', 'Gagal mendapatkan token dari Google.');
+        isLoading.value = false;
+        return;
+      }
+
+      final String baseUrlCloud = controller.backendAPI.value;
+      final String apiKeyCloud = controller.backendApiKey.value;
+      final String apiUrl =
+          "$baseUrlCloud/api/auth/google-login"; // Ganti dengan endpoint Anda
+      final String apiKey = "$apiKeyCloud";
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json', 'x-api-key': apiKey},
+        body: jsonEncode({'id_token': idToken}), // Kirim idToken ke backend
       );
 
-      // Login ke Firebase
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      User? user = userCredential.user;
+      final data = jsonDecode(response.body);
 
-      if (user != null) {
-        print("Login sukses: ${user.displayName} (${user.email})");
+      if (response.statusCode == 200) {
+        final token = data['token'];
+        final user = data['user'];
+        final email = user['email'];
 
-        await historyController.saveLoginHistory(user.email ?? '', 'Google');
-
-        final token = googleAuth.accessToken;
-        final email = googleUser.email;
-
-        await AuthService.saveToken(token!);
+        await AuthService.saveToken(token);
         await AuthService.saveEmail(email);
+        await historyController.saveLoginHistory(email, 'Google');
 
-        Get.snackbar("Sukses", "Login Google berhasil");
         Get.offAllNamed('/home');
+        Get.snackbar('Success', 'Login dengan Google berhasil!');
+      } else {
+        // Jika backend mengembalikan error
+        Get.snackbar(
+          'Login Gagal',
+          data['message'] ?? 'Login Google gagal.',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
       print("Error saat login Google: $e");
       Get.snackbar("Error", "Terjadi kesalahan saat login: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
 
